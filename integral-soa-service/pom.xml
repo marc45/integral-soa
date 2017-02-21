@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>integral-soa</artifactId>
+        <groupId>com.lenovo.m2.integral.soa</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>integral-soa-service</artifactId>
+    <packaging>jar</packaging>
+
+    <name>integral-soa-service</name>
+    <url>http://maven.apache.org</url>
+
+    <build>
+        <plugins>
+            <!--docker-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.4.11</version>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dockerDirectory>${project.basedir}</dockerDirectory>
+                    <pushImage>true</pushImage>
+                    <imageName>
+                        dockerhub.lefile.cn/${project.docker.group}/${project.docker.application}-${project.docker.role}:${project.version}
+                    </imageName>
+                </configuration>
+            </plugin>
+            <!--kubernetes-->
+            <plugin>
+                <groupId>com.lenovo</groupId>
+                <artifactId>maven-kubernetes-plugin</artifactId>
+                <version>0.0.2-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <project.docker.canDeploy>true</project.docker.canDeploy>
+        <project.docker.useIngress>false</project.docker.useIngress>
+        <project.docker.role>soa</project.docker.role>
+        <project.docker.minReplicas>3</project.docker.minReplicas>
+        <project.docker.maxReplicas>10</project.docker.maxReplicas>
+        <project.docker.cpu>800m</project.docker.cpu>
+        <project.docker.memory>2Gi</project.docker.memory>
+        <project.docker.jvmOpts>-Xmx2g -Xms2g -Xmn512m -Xss1m -XX:PermSize=512m -XX:MaxPermSize=512m</project.docker.jvmOpts>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.lenovo.m2.integral.soa</groupId>
+            <artifactId>integral-soa-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lenovo.m2.integral.soa</groupId>
+            <artifactId>integral-manager</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
