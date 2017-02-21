@@ -261,7 +261,12 @@
             </exclusions>
         </dependency>
 
-
+        <!--获取优惠券信息接口-->
+        <dependency>
+            <groupId>com.lenovo.m2.couponV2</groupId>
+            <artifactId>couponV2-soa-api</artifactId>
+            <version>3.0.2-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 
@@ -299,7 +304,8 @@
         <project.docker.group>team2</project.docker.group>
         <project.docker.application>integral-soa</project.docker.application>
         <project.docker.author>shaoyh2</project.docker.author>
-        <project.docker.git>git@git.lefile.cn:stock/stock2-soa.git</project.docker.git>
+        <project.docker.git>git@git.lefile.cn:stock/integral-soa.git</project.docker.git>
+        <project.jenkins.address>http://ci.lefile.cn</project.jenkins.address>
         <project.docker.region>cn,us</project.docker.region>
         <project.docker.uatMultiRegion>true</project.docker.uatMultiRegion>
 

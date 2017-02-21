@@ -28,13 +28,15 @@ public class IntegralExchangeServiceImpl implements IntegralExchangeService {
         try {
 
             int i = integralExchangeManager.addIntegralExchange(integralExchange);
-            remoteResult.setSuccess(true);
 
-            /*if (i==0){
+            if (i==0){
                 remoteResult.setResultMsg("添加失败");
-            }*/
+            }else {
+                remoteResult.setSuccess(true);
+            }
 
         }catch (Exception e){
+            remoteResult.setResultMsg("添加失败");
             e.printStackTrace();
         }
 

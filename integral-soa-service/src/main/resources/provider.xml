@@ -13,10 +13,12 @@
     <dubbo:registry address="${dubbo.registry.address}"  protocol="${dubbo.registry.protocol}" group="${dubbo.registry.group}"/>
     <dubbo:protocol  port="-1" threads="300" />
 
+    <dubbo:reference id="salescouponsService" interface="com.lenovo.m2.couponV2.api.service.SalescouponsService" cache="false" timeout="500000" check="false" retries="0"/>
+
+
     <!--日历服务-->
-    <!--<dubbo:service interface="com.lenovo.m2.stock.soa.api.service.WorkdayService" ref="workdayService" />-->
-    <!--<dubbo:service interface="com.lenovo.m2.stock.soa.api.service.WorkdayService" ref="workdayService" />-->
-    <!--<dubbo:service interface="com.lenovo.m2.stock.soa.api.service.WorkdayService" ref="workdayService" />-->
+    <dubbo:service interface="com.lenovo.m2.integral.soa.api.IntegralExchangeService" ref="integralExchangeService" />
+    <dubbo:service interface="com.lenovo.m2.integral.soa.api.ItemBindingCouponService" ref="itemBindingCouponService" />
 
 
 </beans>

@@ -5,6 +5,8 @@ import com.lenovo.common.base.PageMap;
 import com.lenovo.fis.client.ServicesClient;
 import com.lenovo.fis.model.DProductsManage;
 import com.lenovo.m2.arch.framework.domain.RemoteResult;
+import com.lenovo.m2.couponV2.api.model.SalescouponsApi;
+import com.lenovo.m2.couponV2.api.service.SalescouponsService;
 import com.lenovo.m2.integral.soa.api.ItemBindingCouponService;
 import com.lenovo.m2.integral.soa.domain.IntegralCoupon;
 import com.lenovo.m2.integral.soa.domain.IntegralItem;
@@ -26,6 +28,9 @@ public class ItemBindingCouponServiceImpl implements ItemBindingCouponService{
 
     @Autowired
     private IntegralCouponManager integralCouponManager;
+
+    @Autowired
+    private SalescouponsService salescouponsService;
 
     //商品服务
     private NewGoodsService proService = ServicesClient.getInstance().getService(NewGoodsService.class);
@@ -62,13 +67,20 @@ public class ItemBindingCouponServiceImpl implements ItemBindingCouponService{
 
             integralItemManager.addIntegralItem(integralItem);
 
-            //TODO
             //根据优惠券id获取优惠券信息
+            RemoteResult<SalescouponsApi> salescouponsById = salescouponsService.getSalescouponsById(Long.parseLong(couponId));
+            SalescouponsApi salescouponsApi = salescouponsById.getT();
 
             IntegralCoupon integralCoupon = new IntegralCoupon();
             integralCoupon.setCouponId(couponId);
-            //TODO
+            integralCoupon.setCouponName(salescouponsApi.getName());
+            integralCoupon.setMoney(salescouponsApi.getAmount());
+            integralCoupon.setBegintime(salescouponsApi.getFromtime());
+            integralCoupon.setEndtime(salescouponsApi.getTotime());
+            integralCoupon.setUseScope(salescouponsApi.getDescription());
+            integralCoupon.setPlatform(salescouponsApi.getTerminal());
 
+            integralCouponManager.addIntegralCoupon(integralCoupon);
 
             remoteResult.setSuccess(true);
             remoteResult.setResultMsg("绑定成功");
@@ -76,7 +88,6 @@ public class ItemBindingCouponServiceImpl implements ItemBindingCouponService{
             remoteResult.setResultMsg("绑定失败");
             e.printStackTrace();
         }
-
         return remoteResult;
     }
 
@@ -96,10 +107,20 @@ public class ItemBindingCouponServiceImpl implements ItemBindingCouponService{
             IntegralItem integralItem = integralItemManager.getIntegralItem(itemId);
             String couponId = integralItem.getCouponId();
 
-            //TODO
-            //调用优惠券接口，根据id获取优惠券信息，返回
+            //根据优惠券id获取优惠券信息
+            RemoteResult<SalescouponsApi> salescouponsById = salescouponsService.getSalescouponsById(Long.parseLong(couponId));
+            SalescouponsApi salescouponsApi = salescouponsById.getT();
 
+            IntegralCoupon integralCoupon = new IntegralCoupon();
+            integralCoupon.setCouponId(couponId);
+            integralCoupon.setCouponName(salescouponsApi.getName());
+            integralCoupon.setMoney(salescouponsApi.getAmount());
+            integralCoupon.setBegintime(salescouponsApi.getFromtime());
+            integralCoupon.setEndtime(salescouponsApi.getTotime());
+            integralCoupon.setUseScope(salescouponsApi.getDescription());
+            integralCoupon.setPlatform(salescouponsApi.getTerminal());
 
+            remoteResult.setT(integralCoupon);
             remoteResult.setSuccess(true);
             remoteResult.setResultMsg("成功");
         }catch (Exception e){

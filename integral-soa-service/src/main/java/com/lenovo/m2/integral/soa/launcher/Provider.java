@@ -1,6 +1,5 @@
 package com.lenovo.m2.integral.soa.launcher;
 
-import com.lenovo.m2.integral.soa.App;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -27,10 +26,6 @@ public class Provider {
                             "provider.xml"
                     }
             );
-
-            App app = (App) ctx.getBean("app");
-            app.test();
-
 
             LOGGER.info("SOA服务启动 over！一切正常！Dubbo service server started!");
         } catch (RuntimeException e) {
