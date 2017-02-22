@@ -16,7 +16,7 @@
     <dubbo:reference id="salescouponsService" interface="com.lenovo.m2.couponV2.api.service.SalescouponsService" cache="false" timeout="500000" check="false" retries="0"/>
 
 
-    <!--日历服务-->
+    <!--soa服务-->
     <dubbo:service interface="com.lenovo.m2.integral.soa.api.IntegralExchangeService" ref="integralExchangeService" />
     <dubbo:service interface="com.lenovo.m2.integral.soa.api.ItemBindingCouponService" ref="itemBindingCouponService" />
 
