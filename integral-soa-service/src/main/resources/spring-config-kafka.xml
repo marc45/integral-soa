@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd"
+       default-lazy-init="false">
+
+    <!--消费-->
+    <bean id="kafkaConsumerOptions" class="com.lenovo.kafka.api.core.factory.KafkaConsumerOptions">
+        <property name="connectionZk" value="${connectionZk}" />
+        <property name="groupName" value="${groupName}" />
+        <property name="zkSessionTimeout" value="${zkSessionTimeout}" />
+        <property name="zkSyncTime" value="${zkSyncTime}" />
+        <property name="autoCommitInterval" value="${autoCommitInterval}" />
+        <property name="rebalanceBackOff" value="${rebalanceBackOff}" />
+        <property name="rebalanceMaxRetries" value="${rebalanceMaxRetries}" />
+        <property name="autoOffsetReset" value="${autoOffsetReset}" />
+        <property name="topicName" value="${send.order.topic}" />
+    </bean>
+    <bean id="kafkaConsumerFactory" class="com.lenovo.kafka.api.core.factory.KafkaConsumerFactory"
+          init-method="initialize">
+        <constructor-arg ref="kafkaConsumerOptions" />
+    </bean>
+    <bean id="kafkaConsumer" class="com.lenovo.kafka.api.core.consumer.KafkaConsumer">
+        <constructor-arg ref="kafkaConsumerFactory" />
+    </bean>
+
+    <!--<bean id="addOrderMessageCustomer" class="com.lenovo.hawkeye.service.message.AddOrderMessageCustomer">
+        <constructor-arg ref="kafkaConsumer_order"/>
+        <constructor-arg ref="queueSender"/>
+    </bean>-->
+</beans>
