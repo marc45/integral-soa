@@ -13,59 +13,22 @@
     <name>integral-soa-service</name>
     <url>http://maven.apache.org</url>
 
-    <build>
-        <plugins>
-            <!--docker-->
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.4.11</version>
-                <executions>
-                    <execution>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <dockerDirectory>${project.basedir}</dockerDirectory>
-                    <pushImage>true</pushImage>
-                    <imageName>
-                        dockerhub.lefile.cn/${project.docker.group}/${project.docker.application}-${project.docker.role}:${project.version}
-                    </imageName>
-                </configuration>
-            </plugin>
-            <!--kubernetes-->
-            <plugin>
-                <groupId>com.lenovo</groupId>
-                <artifactId>maven-kubernetes-plugin</artifactId>
-                <version>0.0.2-SNAPSHOT</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <!-- Docker & Kubernetes & Jenkins 插件配置 -->
         <project.docker.canDeploy>true</project.docker.canDeploy>
-        <project.docker.useIngress>false</project.docker.useIngress>
-        <project.docker.role>soa</project.docker.role>
-        <project.docker.minReplicas>3</project.docker.minReplicas>
+        <project.docker.deployType>canary</project.docker.deployType>     <!-- canary部署模式，支持先部署一部分，待其他项目完成部署再继续剩余pod的部署，期间新老版本将同时运行 -->
+        <project.docker.role>svc</project.docker.role>                            <!-- 建议dubbo应用设为 svc, 减少最终 pod 名字的长度 -->
+        <project.docker.author>shaoyh2</project.docker.author>
+        <project.docker.minReplicas>2</project.docker.minReplicas>
         <project.docker.maxReplicas>10</project.docker.maxReplicas>
-        <project.docker.cpu>800m</project.docker.cpu>
-        <project.docker.memory>2Gi</project.docker.memory>
-        <project.docker.jvmOpts>-Xmx2g -Xms2g -Xmn512m -Xss1m -XX:PermSize=512m -XX:MaxPermSize=512m</project.docker.jvmOpts>
+        <project.docker.cpu>500m</project.docker.cpu>
+        <project.docker.memory>1Gi</project.docker.memory>
+        <project.docker.jvmOpts>-Xmx1g -Xms1g -Xmn512m -Xss1m -XX:PermSize=512m -XX:MaxPermSize=512m</project.docker.jvmOpts>
     </properties>
-
     <dependencies>
 
         <dependency>
@@ -87,4 +50,43 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <!-- Kubernetes 插件用于生成 k8s 的 deployment, service, ingress, hpa 配置 -->
+            <plugin>
+                <groupId>com.lenovo</groupId>
+                <artifactId>maven-kubernetes-plugin</artifactId>
+                <version>0.0.2-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Docker 插件用于生成 Docker 镜像并发布到镜像仓库，插件执行顺序有影响，放到plugins的末尾 -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.4.11</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dockerDirectory>${project.basedir}</dockerDirectory>
+                    <pushImage>true</pushImage>
+                    <imageName>
+                        dockerhub.lefile.cn/${project.docker.group}/${project.docker.application}-${project.docker.role}:${project.version}
+                    </imageName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

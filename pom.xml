@@ -304,6 +304,7 @@
         <project.docker.group>team2</project.docker.group>
         <project.docker.application>integral-soa</project.docker.application>
         <project.docker.author>shaoyh2</project.docker.author>
+        <project.docker.pom>pom.xml</project.docker.pom>
         <project.docker.git>git@git.lefile.cn:stock/integral-soa.git</project.docker.git>
         <project.jenkins.address>http://ci.lefile.cn</project.jenkins.address>
         <project.docker.region>cn,us</project.docker.region>
@@ -312,51 +313,33 @@
     </properties>
 
     <build>
-        <plugins>
-            <!--docker 插件-->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <version>2.1</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-scm-plugin</artifactId>
-                <version>1.9</version>
-                <configuration>
-                    <tag>v${project.version}</tag>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <encoding>utf8</encoding>
-                </configuration>
-            </plugin>
-            <!--docker jenkins插件-->
-            <plugin>
-                <groupId>com.lenovo</groupId>
-                <artifactId>maven-jenkins-plugin</artifactId>
-                <version>0.0.2-i18n-SNAPSHOT</version>
-                <executions>
-                    <execution>
-                        <phase>jenkins</phase>
-                        <goals>
-                            <goal>docker</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <devBranches>
-                        <branch>master</branch>
-                        <branch>future-1.0</branch>
-                    </devBranches>
-                </configuration>
-            </plugin>
-        </plugins>
+        <defaultGoal>install</defaultGoal>
+            <plugins>
+                <!-- Jenkins 插件用于生成创建 Jenkins 发布流程的种子文件 -->
+                <plugin>
+                    <groupId>com.lenovo</groupId>
+                    <artifactId>maven-jenkins-plugin</artifactId>
+                    <version>0.0.2-i18n-SNAPSHOT</version>
+                    <executions>
+                        <execution>
+                            <phase>jenkins</phase>
+                            <goals>
+                                <goal>job-create</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+
+                    <!-- 以下配置的是开发分支，会为配置的每个分支创建一个开发流程 -->
+                    <configuration>
+                        <devBranches>
+                            <branch>master</branch>
+                            <branch>future-1.2.1</branch>
+                        </devBranches>
+                    </configuration>
+
+                </plugin>
+
+            </plugins>
     </build>
 
 
