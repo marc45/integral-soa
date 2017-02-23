@@ -1,4 +1,4 @@
-From dockerhub.lefile.cn/dubbo:jdk7
+From dockerhub.lefile.cn/alpine_jdk:7
 
 MAINTAINER shaoyh2@lenovo.com
 
