@@ -7,4 +7,8 @@ fi
 
 echo $ENV
 
-/data/service/bin/start.sh; tail -f /data/logs/resin/*.log
+/data/service/bin/start.sh;
+
+sleep 10s
+
+tail -f /data/logs/dubbo/*.log

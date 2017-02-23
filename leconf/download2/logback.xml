@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Reference Manual http://logback.qos.ch/manual/index.html -->
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
-    <property name="log.path" value="/data/logs/resin" />
+    <property name="log.path" value="/data/logs/dubbo" />
 
     <configuration scan="true" scanPeriod="60 seconds" debug="false"/>
 
