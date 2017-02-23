@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by admin on 2017/2/16.
  */
-public class ItemAndCoupon implements Serializable {
+public class ItemAndCoupon extends IntegralCoupon implements Serializable {
 
     /**
      * 积分商品信息

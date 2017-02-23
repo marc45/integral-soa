@@ -10,12 +10,20 @@
                 (item_id,
                 item_name,
                 coupon_id,
-                binding_type)
+                binding_type,
+                create_id,
+                create_time,
+                update_id,
+                update_time)
                 values
                 (#{itemId},
                 #{itemName},
                 #{couponId},
                 #{bindingType},
+                #{createId},
+                #{createTime},
+                #{updateId},
+                #{updateTime})
         </insert>
 
         <select id="getIntegralItem" parameterType="java.lang.String" resultMap="integralItemResultMap">
@@ -23,6 +31,17 @@
                 FROM integral_item
                 WHERE item_id=#{itemId}
         </select>
+
+        <select id="getItemAndCouponInfo" parameterType="java.lang.String" resultMap="itemAndCouponResultMap">
+                SELECT i.item_id,i.item_name,i.binding_type,c.coupon_id,c.coupon_name,c.money,c.begintime,c.endtime,c.use_scope,c.platform
+                FROM integral_item i
+                LEFT JOIN integral_coupon c ON i.coupon_id=c.coupon_id
+                WHERE item_id=#{itemId}
+        </select>
+
+        <resultMap id="itemAndCouponResultMap" type="com.lenovo.m2.integral.soa.domain.ItemAndCoupon">
+
+        </resultMap>
 
         <resultMap id="integralItemResultMap" type="com.lenovo.m2.integral.soa.domain.IntegralItem">
                 <id column="item_id" property="itemId"/>
@@ -37,6 +56,8 @@
                         <if test="itemName!=null">item_name=#{itemName},</if>
                         <if test="couponId!=null">coupon_id=#{couponId},</if>
                         <if test="bindingType!=null">binding_type=#{bindingType},</if>
+                        <if test="updateId!=null">update_id=#{updateId},</if>
+                        <if test="updateTime!=null">update_time=#{updateTime},</if>
                 </set>
                 WHERE item_id=#{itemId}
         </update>

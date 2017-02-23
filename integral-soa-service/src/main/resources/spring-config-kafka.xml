@@ -30,8 +30,10 @@
         <constructor-arg ref="kafkaConsumerFactory" />
     </bean>
 
-    <!--<bean id="addOrderMessageCustomer" class="com.lenovo.hawkeye.service.message.AddOrderMessageCustomer">
-        <constructor-arg ref="kafkaConsumer_order"/>
+
+
+    <bean id="addOrderMessageCustomer" class="com.lenovo.m2.integral.soa.message.AddOrderMessageCustomer">
+        <constructor-arg ref="kafkaConsumer"/>
         <constructor-arg ref="queueSender"/>
-    </bean>-->
+    </bean>
 </beans>

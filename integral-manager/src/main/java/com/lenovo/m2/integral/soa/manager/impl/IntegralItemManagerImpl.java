@@ -1,6 +1,8 @@
 package com.lenovo.m2.integral.soa.manager.impl;
 
+import com.lenovo.m2.integral.soa.dao.CouponInfoDao;
 import com.lenovo.m2.integral.soa.dao.IntegralItemBindingDao;
+import com.lenovo.m2.integral.soa.domain.IntegralCoupon;
 import com.lenovo.m2.integral.soa.domain.IntegralItem;
 import com.lenovo.m2.integral.soa.manager.IntegralItemManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,18 @@ public class IntegralItemManagerImpl implements IntegralItemManager {
 
     @Autowired
     private IntegralItemBindingDao integralItemBindingDao;
+
+    @Autowired
+    private CouponInfoDao couponInfoDao;
+
+    @Override
+    public int addItemBindingCoupon(IntegralItem integralItem, IntegralCoupon integralCoupon) {
+
+        int i = integralItemBindingDao.addIntegralItem(integralItem);
+        int i1 = couponInfoDao.addCoupon(integralCoupon);
+
+        return i+i1;
+    }
 
     @Override
     public int addIntegralItem(IntegralItem integralItem) {

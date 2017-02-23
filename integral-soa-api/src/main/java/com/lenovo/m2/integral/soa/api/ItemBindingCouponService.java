@@ -14,7 +14,7 @@ public interface ItemBindingCouponService {
      * @param couponId
      * @return
      */
-    public RemoteResult addItemBindingCoupon(String itemId,String couponId);
+    public RemoteResult addItemBindingCoupon(String itemId,String couponId,String memberId);
 
     /**
      * 根据商品code，获取优惠券信息
