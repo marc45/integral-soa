@@ -373,7 +373,7 @@
                 <plugin>
                     <groupId>com.lenovo</groupId>
                     <artifactId>maven-jenkins-plugin</artifactId>
-                    <version>0.0.2-i18n-SNAPSHOT</version>
+                    <version>0.0.2-SNAPSHOT</version>
                     <executions>
                         <execution>
                             <phase>jenkins</phase>
