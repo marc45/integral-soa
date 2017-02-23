@@ -1,4 +1,4 @@
-CLASS_NAME="com.lenovo.m2.stock.soa.launcher.Provider"
+CLASS_NAME="com.lenovo.m2.integral.soa.launcher.Provider"
 CONF_NAME="conf/provider.xml"
 
 if [ -z "$SERVER_NAME" ]; then
