@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lenovo.m2.integral.soa.dao.IntegralExchangeDao">
+
+    <insert id="addExchangeRecord" parameterType="com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord">
+        insert into integral_exchange
+            (id,
+            member_id,
+            integral_number,
+            exchange_time,
+            coupon_id,
+            coupon_name,
+            coupon_money)
+        values
+            (#{uuid},
+            #{memberId},
+            #{integralNum},
+            #{exchangeTime},
+            #{couponId},
+            #{couponName},
+            #{couponMoney})
+    </insert>
+
+    <select id="getExchangeRecord" parameterType="java.lang.String" resultMap="exchangeRecordResultMap">
+        SELECT id,member_id,integral_number,exchange_time,coupon_id,coupon_name,coupon_money
+        FROM integral_exchange
+        WHERE id=#{uuid}
+    </select>
+
+    <select id="getExchangeRecordByPage" parameterType="com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord" resultMap="exchangeRecordResultMap">
+        SELECT id,member_id,integral_number,exchange_time,coupon_id,coupon_name,coupon_money
+        FROM integral_exchange
+        WHERE member_id=#{memberId}
+        <!--<if test="begintime!=null and endtime!=null">
+            AND exchange_time BETWEEN #{begintime} AND #{endtime}
+        </if>-->
+        ORDER BY exchange_time DESC
+    </select>
+
+    <resultMap id="exchangeRecordResultMap" type="com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord">
+        <id column="id" property="uuid"/>
+        <result column="member_id" property="memberId"/>
+        <result column="integral_number" property="integralName"/>
+        <result column="exchange_time" property="exchangetime"/>
+        <result column="coupon_id" property="couponId"/>
+        <result column="coupon_name" property="couponName"/>
+        <result column="coupon_money" property="couponMoney"/>
+    </resultMap>
+
+</mapper>

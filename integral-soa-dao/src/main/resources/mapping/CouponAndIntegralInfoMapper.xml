@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lenovo.m2.integral.soa.dao.IntegralExchangeDao">
+
+    <insert id="addCouponInfo" parameterType="com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo">
+        insert into integral_coupon
+            (coupon_id,
+            coupon_name,
+            coupon_money,
+            fromtime,
+            totime,
+            use_scope,
+            platform,
+            getstarttime,
+            getendtime,
+            integral_number,
+            maxnumber,
+            create_id,
+            create_time,
+            update_id,
+            update_time,
+            state)
+        values
+            (#{couponId},
+            #{couponName},
+            #{couponMoney},
+            #{fromtime},
+            #{totime},
+            #{useScope},
+            #{platform},
+            #{getstarttime},
+            #{getendtime},
+            #{integralNum},
+            #{maxNum},
+            #{createId},
+            #{createtime},
+            #{updateId},
+            #{updatetime},
+            #{state})
+    </insert>
+
+    <select id="getCouponInfo" parameterType="java.lang.String" resultMap="couponInfoResultMap">
+        SELECT coupon_id,coupon_name,coupon_money,fromtime,totime,use_scope,platform,
+            getstarttime,getendtime,integral_number,maxnumber,create_id,create_time,
+            update_id,update_time,state
+        FROM integral_coupon
+        WHERE coupon_id=#{couponId}
+    </select>
+
+    <select id="getAllCouponInfo" parameterType="com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo" resultMap="couponInfoResultMap">
+        SELECT coupon_id,coupon_name,coupon_money,fromtime,totime,use_scope,platform,
+            getstarttime,getendtime,integral_number,maxnumber,create_id,create_time,
+            update_id,update_time,state
+        FROM integral_coupon
+        WHERE #{date} BETWEEN getstarttime AND getendtime AND state=1
+        ORDER BY update_time DESC
+    </select>
+
+    <select id="getCouponInfoByPage" parameterType="com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo" resultMap="couponInfoResultMap">
+        SELECT coupon_id,coupon_name,coupon_money,fromtime,totime,use_scope,platform,
+        getstarttime,getendtime,integral_number,maxnumber,create_id,create_time,
+        update_id,update_time,state
+        FROM integral_coupon
+        <where>
+
+        </where>
+        ORDER BY update_time DESC
+    </select>
+
+    <resultMap id="couponInfoResultMap" type="com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo">
+        <id column="coupon_id" property="couponId"/>
+        <result column="coupon_name" property="couponName"/>
+        <result column="coupon_money" property="couponMoney"/>
+        <result column="fromtime" property="fromtime"/>
+        <result column="totime" property="totime"/>
+        <result column="use_scope" property="useScope"/>
+        <result column="platform" property="platform"/>
+        <result column="getstarttime" property="getstarttime"/>
+        <result column="getendtime" property="getendtime"/>
+        <result column="integral_number" property="integralNum"/>
+        <result column="maxnumber" property="maxNum"/>
+        <result column="create_id" property="createId"/>
+        <result column="create_time" property="createtime"/>
+        <result column="update_id" property="updateId"/>
+        <result column="update_time" property="updatetime"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+    <update id="updateCouponInfo" parameterType="com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo">
+        UPDATE integral_coupon
+        <set>
+            <if test="integralNum!=null">integral_number=#{integralNum},</if>
+            <if test="state!=null">state=#{state},</if>
+            <if test="updateId!=null">update_id=#{updateId},</if>
+            <if test="updatetime!=null">update_time=#{updatetime},</if>
+        </set>
+        WHERE coupon_id=#{couponId}
+    </update>
+
+</mapper>
