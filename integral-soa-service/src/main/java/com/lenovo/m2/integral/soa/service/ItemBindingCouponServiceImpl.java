@@ -58,8 +58,6 @@ public class ItemBindingCouponServiceImpl implements ItemBindingCouponService{
             //查询数据库，判断该商品是否已经绑定了优惠券，绑定了哪张优惠券
 
 
-
-
             //调用商品接口，获取信息，存储到对应的数据表中
 
             PageMap pageMap = new PageMap();
