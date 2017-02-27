@@ -28,7 +28,7 @@ public class CouponAndIntegralInfo implements Serializable {
     private Integer state;//是否启用，0停用，1启用
 
     private Date date;//当前时间
-    private Integer sellout;
+    private Integer sellout;//是否还有剩余
 
     public Integer getSellout() {
         return sellout;

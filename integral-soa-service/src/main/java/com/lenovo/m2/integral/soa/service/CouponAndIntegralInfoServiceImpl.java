@@ -158,6 +158,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             if (couponInfoByPage!=null){
                 remoteResult.setSuccess(true);
                 remoteResult.setResultCode(IntegralResultCode.SUCCESS);
+                remoteResult.setResultMsg("查询成功");
                 remoteResult.setT(couponInfoByPage);
             }
         }catch (Exception e){

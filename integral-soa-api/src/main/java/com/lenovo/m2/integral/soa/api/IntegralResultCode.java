@@ -7,7 +7,7 @@ public class IntegralResultCode {
 
     public static final String SUCCESS = "0000";//兑换成功
 
-    public static final String COUPON_UNUSABLE = "0001";//无法使用该优惠券
+    public static final String COUPON_UNUSABLE = "1001";//无法使用该优惠券
 
     public static final String INTEGRAL_LACK = "1002";//积分不足
 
