@@ -35,6 +35,9 @@
                 <value>classpath:integral-dubbo.properties</value>
                 <value>classpath:integral-kafka.properties</value>
                 <value>classpath:logback.xml</value>
+                <value>classpath:env.properties</value>
+                <value>classpath:interface.properties</value>
+                <value>classpath:integral-activemq.properties</value>
             </list>
         </property>
     </bean>

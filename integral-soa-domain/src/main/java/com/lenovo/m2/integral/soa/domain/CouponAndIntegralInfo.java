@@ -28,6 +28,15 @@ public class CouponAndIntegralInfo implements Serializable {
     private Integer state;//是否启用，0停用，1启用
 
     private Date date;//当前时间
+    private Integer sellout;
+
+    public Integer getSellout() {
+        return sellout;
+    }
+
+    public void setSellout(Integer sellout) {
+        this.sellout = sellout;
+    }
 
     public Date getDate() {
         return date;

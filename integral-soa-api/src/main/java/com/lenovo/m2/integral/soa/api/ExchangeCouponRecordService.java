@@ -10,7 +10,7 @@ import com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord;
  */
 public interface ExchangeCouponRecordService {
 
-    public RemoteResult exchangeCoupon(String couponId,String memberId,String lenovoId);
+    public RemoteResult exchangeCoupon(String shopId,String couponId,String memberId,String lenovoId);
 
     public RemoteResult<ExchangeCouponRecord> getExchangeRecord(String uuid);
 

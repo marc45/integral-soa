@@ -14,11 +14,11 @@ public interface CouponAndIntegralInfoService {
 
     public RemoteResult<CouponAndIntegralInfo> getCouponInfo(String couponId);
 
-    public RemoteResult addCouponInfo(String couponId,String memberId,int integralNum,int state);
+    public RemoteResult addCouponInfo(String couponId,String memberId,Integer integralNum,Integer state);
 
     public RemoteResult<PageModel2<CouponAndIntegralInfo>> getCouponInfoByPage(PageQuery pageQuery,CouponAndIntegralInfo couponAndIntegralInfo);
 
-    public RemoteResult updateCouponInfo(String memberId,int integralNum,int state);
+    public RemoteResult updateCouponInfo(String couponId,String memberId,Integer integralNum,Integer state);
 
     public RemoteResult<List<CouponAndIntegralInfo>> getAllCouponInfo();
 

@@ -65,7 +65,7 @@
         update_id,update_time,state
         FROM integral_coupon
         <where>
-
+            <if test=""></if>
         </where>
         ORDER BY update_time DESC
     </select>

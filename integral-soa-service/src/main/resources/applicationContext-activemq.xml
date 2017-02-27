@@ -44,18 +44,18 @@
     <!--&lt;!&ndash; 定义Queue监听器 &ndash;&gt;-->
     <jms:listener-container destination-type="queue" container-type="default" connection-factory="connectionFactory" acknowledge="auto">
         <!--<jms:listener destination="addOrder.queue" ref="orderMessageReceiver"/>-->
-        <jms:listener destination="aaaaaaaaaa" ref="orderMessageReceiver"/>
+        <!--<jms:listener destination="aaaaaaaaaa" ref="orderMessageReceiver"/>-->
     </jms:listener-container>
 
 
     <bean id="queueSender" class="com.lenovo.m2.integral.soa.activemq.QueueSender"/>
 
     <!-- 消息消费者 start-->
-    <bean id="orderMessageReceiver" class="com.lenovo.hawkeye.service.activemq.OrderMessageQueueReceiver">
+    <!--<bean id="orderMessageReceiver" class="com.lenovo.hawkeye.service.activemq.OrderMessageQueueReceiver">
         <property name="orderService" ref="orderService"/>
         <property name="mailTemplateService" ref="mailTemplateService"/>
         <property name="emailUtil" ref="emailUtil"/>
-    </bean>
+    </bean>-->
     <!-- 消息消费者 end -->
 
 </beans>  
