@@ -109,7 +109,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             CouponAndIntegralInfo couponInfo = couponAndIntegralInfoManager.getCouponInfo(couponId);
 
             //生成要保存的兑换记录的唯一主键uuid
-            String uuid = UUID.randomUUID().toString().replaceAll("", "-");
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 
             //扣减积分
             MemPointsWriteResult mppay = memPointsClient.write("MPPAY", lenovoId, memberId, couponInfo.getIntegralNum(), "{\"bask_work_order\":\"" + uuid + "\"}");
