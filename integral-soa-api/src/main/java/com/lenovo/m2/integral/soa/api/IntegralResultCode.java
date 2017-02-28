@@ -15,6 +15,8 @@ public class IntegralResultCode {
 
     public static final String BINDING_FAIL = "1004";//绑券失败
 
+    public static final String GETCOUPONINFO_FAIL = "1005";//获取优惠券信息失败
+
     public static final String FAIL = "9999";//系统异常
 
 

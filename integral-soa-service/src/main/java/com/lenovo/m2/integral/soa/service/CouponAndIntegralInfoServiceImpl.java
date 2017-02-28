@@ -48,7 +48,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             //调用优惠券接口，获取优惠券信息
             RemoteResult<SalescouponsApi> salescouponsById = salescouponsService.getSalescouponsById(Long.parseLong(couponId));
             if (!salescouponsById.isSuccess()){
-                remoteResult.setResultCode(IntegralResultCode.FAIL);
+                remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
                 remoteResult.setResultMsg("查询优惠券信息失败");
                 LOGGER.error(JacksonUtil.toJson(salescouponsById)+";"+couponId);
                 return remoteResult;
@@ -97,7 +97,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             //调用优惠券接口，获取优惠券信息
             RemoteResult<SalescouponsApi> salescouponsById = salescouponsService.getSalescouponsById(Long.parseLong(couponId));
             if (!salescouponsById.isSuccess()){
-                remoteResult.setResultCode(IntegralResultCode.FAIL);
+                remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
                 remoteResult.setResultMsg("查询优惠券信息失败");
                 LOGGER.error(JacksonUtil.toJson(salescouponsById)+";"+couponId);
                 return remoteResult;
@@ -231,7 +231,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
                     //调用优惠券接口，获取优惠券信息
                     RemoteResult<SalescouponsApi> salescouponsById = salescouponsService.getSalescouponsById(Long.parseLong(couponId));
                     if (!salescouponsById.isSuccess()){
-                        remoteResult.setResultCode(IntegralResultCode.FAIL);
+                        remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
                         remoteResult.setResultMsg("查询优惠券信息失败");
                         LOGGER.error(JacksonUtil.toJson(salescouponsById)+";"+couponId);
                         return remoteResult;
