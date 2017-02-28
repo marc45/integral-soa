@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.lenovo.m2.integral.soa.dao.IntegralExchangeDao">
+<mapper namespace="com.lenovo.m2.integral.soa.dao.CouponAndIntegralInfoDao">
 
     <insert id="addCouponInfo" parameterType="com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo">
         insert into integral_coupon
@@ -65,7 +65,30 @@
         update_id,update_time,state
         FROM integral_coupon
         <where>
-            <if test=""></if>
+            <if test="couponName!=null">
+                and coupon_name like "%"#{couponName}"%"
+            </if>
+            <if test="couponId!=null">
+                and coupon_id=#{couponId}
+            </if>
+            <if test="couponMoney!=null">
+                and coupon_money=#{couponMoney}
+            </if>
+            <if test="integralNum!=null">
+                and integral_number=#{integralNum}
+            </if>
+            <if test="fromtime!=null">
+                and fromtime>#{fromtime}
+            </if>
+            <if test="totime!=null">
+                <![CDATA[ and totime<#{totime} ]]>
+            </if>
+            <if test="getstarttime!=null">
+                and getstarttime>#{getstarttime}
+            </if>
+            <if test="getendtime!=null">
+                <![CDATA[ and getendtime<#{getendtime} ]]>
+            </if>
         </where>
         ORDER BY update_time DESC
     </select>
