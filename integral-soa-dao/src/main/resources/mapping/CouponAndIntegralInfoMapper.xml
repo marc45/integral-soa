@@ -96,7 +96,7 @@
     <resultMap id="couponInfoResultMap" type="com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo">
         <id column="coupon_id" property="couponId"/>
         <result column="coupon_name" property="couponName"/>
-        <result column="coupon_money" property="couponMoney"/>
+        <result column="coupon_money" property="couponMoney" jdbcType="DECIMAL" javaType="com.lenovo.m2.arch.framework.domain.Money"/>
         <result column="fromtime" property="fromtime"/>
         <result column="totime" property="totime"/>
         <result column="use_scope" property="useScope"/>

@@ -47,7 +47,7 @@
         <result column="exchange_time" property="exchangetime"/>
         <result column="coupon_id" property="couponId"/>
         <result column="coupon_name" property="couponName"/>
-        <result column="coupon_money" property="couponMoney"/>
+        <result column="coupon_money" property="couponMoney" jdbcType="DECIMAL" javaType="com.lenovo.m2.arch.framework.domain.Money"/>
     </resultMap>
 
 </mapper>
