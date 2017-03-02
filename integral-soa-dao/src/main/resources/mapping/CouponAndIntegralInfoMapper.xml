@@ -42,52 +42,55 @@
             #{state})
     </insert>
 
+    <sql id="allColumn">
+        coupon_id,coupon_name,coupon_money,fromtime,totime,use_scope,platform,
+        getstarttime,getendtime,integral_number,maxnumber,create_id,create_time,
+        update_id,update_time,state,currencyCode
+    </sql>
+
     <select id="getCouponInfo" parameterType="java.lang.String" resultMap="couponInfoResultMap">
-        SELECT coupon_id,coupon_name,coupon_money,fromtime,totime,use_scope,platform,
-            getstarttime,getendtime,integral_number,maxnumber,create_id,create_time,
-            update_id,update_time,state
+        SELECT
+          <include refid="allColumn"/>
         FROM integral_coupon
         WHERE coupon_id=#{couponId}
     </select>
 
     <select id="getAllCouponInfo" parameterType="com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo" resultMap="couponInfoResultMap">
-        SELECT coupon_id,coupon_name,coupon_money,fromtime,totime,use_scope,platform,
-            getstarttime,getendtime,integral_number,maxnumber,create_id,create_time,
-            update_id,update_time,state
+        SELECT
+          <include refid="allColumn"/>
         FROM integral_coupon
         WHERE #{date} BETWEEN getstarttime AND getendtime AND state=1
         ORDER BY update_time DESC
     </select>
 
     <select id="getCouponInfoByPage" parameterType="com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo" resultMap="couponInfoResultMap">
-        SELECT coupon_id,coupon_name,coupon_money,fromtime,totime,use_scope,platform,
-        getstarttime,getendtime,integral_number,maxnumber,create_id,create_time,
-        update_id,update_time,state
+        SELECT
+          <include refid="allColumn"/>
         FROM integral_coupon
         <where>
-            <if test="couponName!=null">
-                and coupon_name like #{couponName}
+            <if test="param2.couponId!=null">
+                and coupon_id=#{param2.couponId}
             </if>
-            <if test="couponId!=null">
-                and coupon_id=#{couponId}
+            <if test="param2.couponName!=null">
+                and coupon_name like "%"${param2.couponName}"%"
             </if>
-            <if test="couponMoney!=null">
-                and coupon_money=#{couponMoney}
+            <if test="param2.couponMoney!=null">
+                and coupon_money=#{param2.couponMoney}
             </if>
-            <if test="integralNum!=null">
-                and integral_number=#{integralNum}
+            <if test="param2.integralNum!=null">
+                and integral_number=#{param2.integralNum}
             </if>
-            <if test="fromtime!=null">
-                and fromtime>#{fromtime}
+            <if test="param2.fromtime!=null">
+                and fromtime>#{param2.fromtime}
             </if>
-            <if test="totime!=null">
-                <![CDATA[ and totime<#{totime} ]]>
+            <if test="param2.totime!=null">
+                <![CDATA[ and totime<#{param2.totime} ]]>
             </if>
-            <if test="getstarttime!=null">
-                and getstarttime>#{getstarttime}
+            <if test="param2.getstarttime!=null">
+                and getstarttime>#{param2.getstarttime}
             </if>
-            <if test="getendtime!=null">
-                <![CDATA[ and getendtime<#{getendtime} ]]>
+            <if test="param2.getendtime!=null">
+                <![CDATA[ and getendtime<#{param2.getendtime} ]]>
             </if>
         </where>
         ORDER BY update_time DESC
@@ -110,6 +113,7 @@
         <result column="update_id" property="updateId"/>
         <result column="update_time" property="updatetime"/>
         <result column="state" property="state"/>
+        <result column="currencyCode" property="currencyCode"/>
     </resultMap>
 
     <update id="updateCouponInfo" parameterType="com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo">

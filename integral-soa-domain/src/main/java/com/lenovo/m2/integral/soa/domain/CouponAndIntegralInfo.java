@@ -26,9 +26,18 @@ public class CouponAndIntegralInfo implements Serializable {
     private String updateId;//修改人id
     private Date updatetime;//修改时间
     private Integer state;//是否启用，0停用，1启用
+    private String currencyCode;//货币编码
 
     private Date date;//当前时间
     private Integer sellout;//是否还有剩余
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
 
     public Integer getSellout() {
         return sellout;

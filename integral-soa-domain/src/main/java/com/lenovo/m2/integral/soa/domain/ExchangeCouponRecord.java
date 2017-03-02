@@ -17,6 +17,15 @@ public class ExchangeCouponRecord implements Serializable {
     private String couponId;//优惠券id
     private String couponName;//优惠券名称
     private Money couponMoney;//优惠券金额
+    private String currencyCode;//货币编码
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
 
     public String getUuid() {
         return uuid;

@@ -25,13 +25,13 @@
     </insert>
 
     <select id="getExchangeRecord" parameterType="java.lang.String" resultMap="exchangeRecordResultMap">
-        SELECT id,member_id,integral_number,exchange_time,coupon_id,coupon_name,coupon_money
+        SELECT id,member_id,integral_number,exchange_time,coupon_id,coupon_name,coupon_money,currencyCode
         FROM integral_exchange
         WHERE id=#{uuid}
     </select>
 
     <select id="getExchangeRecordByPage" parameterType="com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord" resultMap="exchangeRecordResultMap">
-        SELECT id,member_id,integral_number,exchange_time,coupon_id,coupon_name,coupon_money
+        SELECT id,member_id,integral_number,exchange_time,coupon_id,coupon_name,coupon_money,currencyCode
         FROM integral_exchange
         WHERE member_id=#{memberId}
         <!--<if test="begintime!=null and endtime!=null">
@@ -48,6 +48,7 @@
         <result column="coupon_id" property="couponId"/>
         <result column="coupon_name" property="couponName"/>
         <result column="coupon_money" property="couponMoney" jdbcType="DECIMAL" javaType="com.lenovo.m2.arch.framework.domain.Money"/>
+        <result column="currencyCode" property="currencyCode"/>
     </resultMap>
 
 </mapper>
