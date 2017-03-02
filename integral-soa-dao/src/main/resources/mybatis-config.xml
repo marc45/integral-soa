@@ -4,7 +4,7 @@
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <package name="com.lenovo.m2.integral.soa.domain"></package>
+        <package name="com.lenovo.m2.integral.soa.domain.*"></package>
     </typeAliases>
 
     <typeHandlers>

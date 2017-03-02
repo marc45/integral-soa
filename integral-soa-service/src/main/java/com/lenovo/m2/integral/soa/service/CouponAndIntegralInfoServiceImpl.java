@@ -57,6 +57,12 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
 
             //查询数据库绑定记录，并将实时查询到的优惠券部分信息填充进去
             CouponAndIntegralInfo couponInfo = couponAndIntegralInfoManager.getCouponInfo(couponId);
+            if (couponInfo==null){
+                remoteResult.setResultCode(IntegralResultCode.PARAMS_FAIL);
+                remoteResult.setResultMsg("没有查到绑定记录");
+                LOGGER.info("getCouponInfo End:"+ JacksonUtil.toJson(remoteResult));
+                return remoteResult;
+            }
             couponInfo.setPlatform(salescouponsApi.getTerminal());
             couponInfo.setUseScope(salescouponsApi.getDescription());
             couponInfo.setFromtime(salescouponsApi.getFromtime());
@@ -153,6 +159,10 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
         RemoteResult<PageModel2<CouponAndIntegralInfo>> remoteResult = new RemoteResult<PageModel2<CouponAndIntegralInfo>>();
 
         try {
+            String couponName = couponAndIntegralInfo.getCouponName();
+            if (couponName!=null){
+                couponAndIntegralInfo.setCouponName("%"+couponName+"%");
+            }
             PageModel2<CouponAndIntegralInfo> couponInfoByPage = couponAndIntegralInfoManager.getCouponInfoByPage(pageQuery, couponAndIntegralInfo);
 
             if (couponInfoByPage!=null){

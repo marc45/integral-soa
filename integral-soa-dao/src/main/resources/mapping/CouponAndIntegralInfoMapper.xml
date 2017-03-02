@@ -66,7 +66,7 @@
         FROM integral_coupon
         <where>
             <if test="couponName!=null">
-                and coupon_name like "%"#{couponName}"%"
+                and coupon_name like #{couponName}
             </if>
             <if test="couponId!=null">
                 and coupon_id=#{couponId}
