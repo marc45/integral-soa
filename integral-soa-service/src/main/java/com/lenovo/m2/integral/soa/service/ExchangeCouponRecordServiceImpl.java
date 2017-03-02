@@ -112,7 +112,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 
             //扣减积分
-            MemPointsWriteResult mppay = memPointsClient.write("MPPAY", lenovoId, memberId, couponInfo.getIntegralNum(), "{\"bask_work_order\":\"" + uuid + "\"}");
+            MemPointsWriteResult mppay = memPointsClient.write("CVCP", lenovoId, memberId, couponInfo.getIntegralNum(), "{\"bask_work_order\":\"" + uuid + "\"}");
             String code = mppay.getCode();
             if ("10006".equals(code)){
                 //用户积分不够扣减
