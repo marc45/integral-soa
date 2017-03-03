@@ -72,7 +72,7 @@
                 and coupon_id=#{param2.couponId}
             </if>
             <if test="param2.couponName!=null">
-                <![CDATA[ and coupon_name like ${param2.couponName} ]]>
+                <![CDATA[ and coupon_name like '%我%' ]]>
             </if>
             <if test="param2.couponMoney!=null">
                 and coupon_money=#{param2.couponMoney}
