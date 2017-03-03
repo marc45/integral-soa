@@ -13,20 +13,6 @@
         </encoder>
     </appender>
 
-    <!--打印sql-->
-    <!--<appender name="daoFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/message/dao/sql.log.%d{yyyy-MM-dd}</fileNamePattern>
-        </rollingPolicy>
-        <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss} %-5p] projectName : integral-soa %X{elk_leId} %X{elk_lenovoId} %X{elk_requestId} %X{ip} [%thread] %-5level %logger{5} - %msg%n</pattern>
-        </encoder>
-    </appender>
-    <logger name="dao" level="DEBUG" additivity="false">
-        <appender-ref ref="daoFILE" />
-    </logger>-->
-
-	
 	<appender name="exchangeCoupon_integral" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${log.path}/message/integral/integral.log.%d{yyyy-MM-dd}</fileNamePattern>
@@ -57,7 +43,7 @@
     <logger name="org.apache.velocity" level="WARN" additivity="false"/>
     <logger name="com.lenovo.m2.arch.framework" level="WARN" additivity="false"/>
     <logger name="com.lenovo.admin.extra.client" level="DEBUG" additivity="false"/>
-    <!--<logger name="ch.qos.logback" level="DEBUG" additivity="false"/>-->
+    <logger name="ch.qos.logback" level="DEBUG" additivity="false"/>
 
 
     <logger name="com.ibatis" level="DEBUG" />
@@ -70,7 +56,7 @@
 
 
 
-    <root level="info">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>
