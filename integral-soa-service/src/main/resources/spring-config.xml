@@ -18,5 +18,4 @@
         <property name="couponBindingUrl" value="${couponBindingUrl}"/>
     </bean>
 
-
 </beans>

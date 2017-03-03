@@ -17,8 +17,6 @@
 
 
     <!--soa服务-->
-    <!--<dubbo:service interface="com.lenovo.m2.integral.soa.api.IntegralExchangeService" ref="integralExchangeService" />
-    <dubbo:service interface="com.lenovo.m2.integral.soa.api.ItemBindingCouponService" ref="itemBindingCouponService" />-->
     <dubbo:service interface="com.lenovo.m2.integral.soa.api.CouponAndIntegralInfoService" ref="couponAndIntegralInfoService" />
     <dubbo:service interface="com.lenovo.m2.integral.soa.api.ExchangeCouponRecordService" ref="exchangeCouponRecordService" />
 

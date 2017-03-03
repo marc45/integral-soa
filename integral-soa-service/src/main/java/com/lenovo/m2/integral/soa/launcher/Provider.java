@@ -27,6 +27,7 @@ public class Provider {
                     }
             );
 
+            System.out.println("SOA服务启动 over！一切正常！Dubbo service server started!");
             LOGGER.info("SOA服务启动 over！一切正常！Dubbo service server started!");
         } catch (RuntimeException e) {
             e.printStackTrace();
