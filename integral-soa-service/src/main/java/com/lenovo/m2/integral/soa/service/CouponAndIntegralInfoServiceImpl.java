@@ -159,6 +159,10 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
         RemoteResult<PageModel2<CouponAndIntegralInfo>> remoteResult = new RemoteResult<PageModel2<CouponAndIntegralInfo>>();
 
         try {
+            String couponName = couponAndIntegralInfo.getCouponName();
+            if (couponName!=null){
+                couponAndIntegralInfo.setCouponName("'%"+couponName+"%'");
+            }
 
             PageModel2<CouponAndIntegralInfo> couponInfoByPage = couponAndIntegralInfoManager.getCouponInfoByPage(pageQuery, couponAndIntegralInfo);
 
