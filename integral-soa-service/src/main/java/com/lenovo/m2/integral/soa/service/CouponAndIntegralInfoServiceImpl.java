@@ -256,6 +256,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
                     Integer sendnumber = salescouponsApi.getSendnumber();
                     if (sendnumber==null){
                         info.setSellout(1);
+                        continue;
                     }
                     //判断是否还有剩余的优惠券可以发放
                     if (maxnumber-sendnumber>0){
