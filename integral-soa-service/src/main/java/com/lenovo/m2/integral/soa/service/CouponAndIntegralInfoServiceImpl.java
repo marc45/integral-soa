@@ -244,6 +244,11 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
                         return remoteResult;
                     }
                     SalescouponsApi salescouponsApi = salescouponsById.getT();
+                    Integer iscanget = salescouponsApi.getIscanget();
+                    if (iscanget==0){
+                        info.setSellout(0);
+                        continue;
+                    }
                     Integer maxnumber = salescouponsApi.getMaxnumber();
                     if (maxnumber==0){
                         //不限制发放张数
@@ -258,12 +263,11 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
                         info.setSellout(0);
                     }
                 }
-
-                remoteResult.setT(allCouponInfo);
-                remoteResult.setSuccess(true);
-                remoteResult.setResultCode(IntegralResultCode.SUCCESS);
-                remoteResult.setResultMsg("查询成功");
             }
+            remoteResult.setT(allCouponInfo);
+            remoteResult.setSuccess(true);
+            remoteResult.setResultCode(IntegralResultCode.SUCCESS);
+            remoteResult.setResultMsg("查询成功");
         }catch (Exception e){
             remoteResult.setResultCode(IntegralResultCode.FAIL);
             remoteResult.setResultMsg("系统异常");

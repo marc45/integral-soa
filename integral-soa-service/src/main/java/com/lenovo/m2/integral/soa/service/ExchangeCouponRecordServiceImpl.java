@@ -107,12 +107,21 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
 
             //查询优惠券绑定的积分信息
             CouponAndIntegralInfo couponInfo = couponAndIntegralInfoManager.getCouponInfo(couponId);
+            if (couponInfo==null){
+                remoteResult.setResultCode(IntegralResultCode.PARAMS_FAIL);
+                remoteResult.setResultMsg("没有查到绑定记录");
+                LOGGER.info("exchangeCoupon End:"+ JacksonUtil.toJson(remoteResult));
+                return remoteResult;
+            }
 
             //生成要保存的兑换记录的唯一主键uuid
             String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 
             //扣减积分
+            INTEGRALLOGGER.info("扣减积分接口参数 :CVCP;"+lenovoId+";"+memberId+";"+couponInfo.getIntegralNum()+";"+uuid);
             MemPointsWriteResult mppay = memPointsClient.write("CVCP", lenovoId, memberId, couponInfo.getIntegralNum(), "{\"bask_work_order\":\"" + uuid + "\"}");
+            INTEGRALLOGGER.info("扣减积分接口返回 :"+JacksonUtil.toJson(mppay));
+
             String code = mppay.getCode();
             if ("10006".equals(code)){
                 //用户积分不够扣减
@@ -137,7 +146,10 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
                 String md5 = MD5.sign(lenovoId + memberId + couponId, MD5_KEY, "UTF-8");
 
                 String path = propertiesUtil.getCouponBindingUrl()+"?lenovoId="+lenovoId+"&couponId="+couponId+"&memberCode="+memberId+"&shopId="+shopId+"&sign="+md5;
+
+                COUPONLOGGER.info("绑优惠券接口参数 :"+path);
                 String resultJson = HttpConnectionUtil.getHttpContentGet(path);
+                COUPONLOGGER.info("绑优惠券接口返回 :"+resultJson);
 
                 //解析绑券返回值
                 JSONObject jsonObject = JSONObject.parseObject(resultJson);
