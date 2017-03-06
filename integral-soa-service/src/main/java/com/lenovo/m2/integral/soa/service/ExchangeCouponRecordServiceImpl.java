@@ -14,8 +14,6 @@ import com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord;
 import com.lenovo.m2.integral.soa.manager.CouponAndIntegralInfoManager;
 import com.lenovo.m2.integral.soa.manager.ExchangeCouponRecordManager;
 import com.lenovo.m2.integral.soa.utils.JacksonUtil;
-import com.lenovo.m2.integral.soa.utils.MD5;
-import com.lenovo.m2.integral.soa.utils.PropertiesUtil;
 import com.lenovo.points.client.MemPointsClient;
 import com.lenovo.points.vo.MemPointsRollbackResult;
 import com.lenovo.points.vo.MemPointsWriteResult;
@@ -53,13 +51,6 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
 
     //积分接口客户端
     private MemPointsClient memPointsClient= MemPointsClient.getInstance();
-
-    //路径工具类
-    @Autowired
-    private PropertiesUtil propertiesUtil;
-
-    //md5加密的钥匙
-    public static final String MD5_KEY = ")(*&^%$#@!MNBVCX76543";
 
     /**
      * 详情页立即兑换接口，兑换优惠券
@@ -150,8 +141,6 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
 
             //积分扣减成功了，下一步绑定优惠券
             try {
-                String md5 = MD5.sign(lenovoId + memberId + couponId, MD5_KEY, "UTF-8");
-
                 COUPONLOGGER.info("绑优惠券接口参数 :"+shopId+";"+couponId+";"+lenovoId+";"+memberId);
 
                 Tenant tenant = new Tenant();
