@@ -249,8 +249,8 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
                     }
                     Integer maxnumber = salescouponsApi.getMaxnumber();
                     if (maxnumber==0){
-                        //不限制发放张数
-                        info.setSellout(1);
+                        //限制，不允许领取
+                        info.setSellout(0);
                         continue;
                     }
                     Integer sendnumber = salescouponsApi.getSendnumber();
