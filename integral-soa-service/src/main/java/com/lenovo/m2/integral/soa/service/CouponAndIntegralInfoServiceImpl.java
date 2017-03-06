@@ -162,12 +162,10 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
 
             PageModel2<CouponAndIntegralInfo> couponInfoByPage = couponAndIntegralInfoManager.getCouponInfoByPage(pageQuery, couponAndIntegralInfo);
 
-            if (couponInfoByPage!=null){
-                remoteResult.setSuccess(true);
-                remoteResult.setResultCode(IntegralResultCode.SUCCESS);
-                remoteResult.setResultMsg("查询成功");
-                remoteResult.setT(couponInfoByPage);
-            }
+            remoteResult.setSuccess(true);
+            remoteResult.setResultCode(IntegralResultCode.SUCCESS);
+            remoteResult.setResultMsg("查询成功");
+            remoteResult.setT(couponInfoByPage);
         }catch (Exception e){
             remoteResult.setResultCode(IntegralResultCode.FAIL);
             remoteResult.setResultMsg("系统异常");
@@ -256,6 +254,9 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
                         continue;
                     }
                     Integer sendnumber = salescouponsApi.getSendnumber();
+                    if (sendnumber==null){
+                        info.setSellout(1);
+                    }
                     //判断是否还有剩余的优惠券可以发放
                     if (maxnumber-sendnumber>0){
                         info.setSellout(1);

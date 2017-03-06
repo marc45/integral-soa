@@ -218,11 +218,10 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
         try {
             ExchangeCouponRecord exchangeRecord = exchangeCouponRecordManager.getExchangeRecord(uuid);
 
-            if (exchangeRecord!=null){
-                remoteResult.setSuccess(true);
-                remoteResult.setResultCode(IntegralResultCode.SUCCESS);
-                remoteResult.setT(exchangeRecord);
-            }
+            remoteResult.setSuccess(true);
+            remoteResult.setResultCode(IntegralResultCode.SUCCESS);
+            remoteResult.setResultMsg("查询成功");
+            remoteResult.setT(exchangeRecord);
         }catch (Exception e){
             remoteResult.setResultCode(IntegralResultCode.FAIL);
             remoteResult.setResultMsg("系统异常");
@@ -248,11 +247,10 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
         try {
             PageModel2<ExchangeCouponRecord> exchangeRecordByPage = exchangeCouponRecordManager.getExchangeRecordByPage(pageQuery, exchangeCouponRecord);
 
-            if (exchangeRecordByPage!=null){
-                remoteResult.setSuccess(true);
-                remoteResult.setResultCode(IntegralResultCode.SUCCESS);
-                remoteResult.setT(exchangeRecordByPage);
-            }
+            remoteResult.setSuccess(true);
+            remoteResult.setResultCode(IntegralResultCode.SUCCESS);
+            remoteResult.setResultMsg("查询成功");
+            remoteResult.setT(exchangeRecordByPage);
         }catch (Exception e){
             remoteResult.setResultCode(IntegralResultCode.FAIL);
             remoteResult.setResultMsg("系统异常");
