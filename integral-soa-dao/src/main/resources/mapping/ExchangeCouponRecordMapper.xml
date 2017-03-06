@@ -18,7 +18,7 @@
             (#{uuid},
             #{memberId},
             #{integralNum},
-            #{exchangeTime},
+            #{exchangetime},
             #{couponId},
             #{couponName},
             #{couponMoney})

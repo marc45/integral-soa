@@ -17,7 +17,9 @@ public class IntegralResultCode {
 
     public static final String GETCOUPONINFO_FAIL = "1005";//获取优惠券信息失败
 
-    public static final String PARAMS_FAIL = "1006";//没有查到绑定记录
+    public static final String SELECT_FAIL = "1006";//没有查到绑定记录
+
+    public static final String PARAMS_FAIL = "1007";//参数异常
 
     public static final String FAIL = "9999";//系统异常
 

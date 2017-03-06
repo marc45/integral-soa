@@ -58,7 +58,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             //查询数据库绑定记录，并将实时查询到的优惠券部分信息填充进去
             CouponAndIntegralInfo couponInfo = couponAndIntegralInfoManager.getCouponInfo(couponId);
             if (couponInfo==null){
-                remoteResult.setResultCode(IntegralResultCode.PARAMS_FAIL);
+                remoteResult.setResultCode(IntegralResultCode.SELECT_FAIL);
                 remoteResult.setResultMsg("没有查到绑定记录");
                 LOGGER.info("getCouponInfo End:"+ JacksonUtil.toJson(remoteResult));
                 return remoteResult;

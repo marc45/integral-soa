@@ -19,6 +19,14 @@ public class ExchangeCouponRecord implements Serializable {
     private Money couponMoney;//优惠券金额
     private String currencyCode;//货币编码
 
+    public Date getExchangetime() {
+        return exchangetime;
+    }
+
+    public void setExchangetime(Date exchangetime) {
+        this.exchangetime = exchangetime;
+    }
+
     public String getCurrencyCode() {
         return currencyCode;
     }
@@ -41,14 +49,6 @@ public class ExchangeCouponRecord implements Serializable {
 
     public void setMemberId(String memberId) {
         this.memberId = memberId;
-    }
-
-    public Date getExchangetime() {
-        return exchangetime;
-    }
-
-    public void setExchangetime(Date exchangetime) {
-        this.exchangetime = exchangetime;
     }
 
     public Integer getIntegralNum() {

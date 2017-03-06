@@ -1,9 +1,10 @@
 package com.lenovo.m2.integral.soa.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.lenovo.m2.arch.framework.domain.PageModel2;
 import com.lenovo.m2.arch.framework.domain.PageQuery;
 import com.lenovo.m2.arch.framework.domain.RemoteResult;
+import com.lenovo.m2.arch.framework.domain.Tenant;
+import com.lenovo.m2.couponV2.api.model.ProductruleApi;
 import com.lenovo.m2.couponV2.api.model.SalescouponsApi;
 import com.lenovo.m2.couponV2.api.service.SalescouponsService;
 import com.lenovo.m2.integral.soa.api.ExchangeCouponRecordService;
@@ -12,7 +13,6 @@ import com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo;
 import com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord;
 import com.lenovo.m2.integral.soa.manager.CouponAndIntegralInfoManager;
 import com.lenovo.m2.integral.soa.manager.ExchangeCouponRecordManager;
-import com.lenovo.m2.integral.soa.utils.HttpConnectionUtil;
 import com.lenovo.m2.integral.soa.utils.JacksonUtil;
 import com.lenovo.m2.integral.soa.utils.MD5;
 import com.lenovo.m2.integral.soa.utils.PropertiesUtil;
@@ -71,7 +71,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
     @Override
     public RemoteResult exchangeCoupon(String shopId,String couponId, String memberId, String lenovoId) {
 
-        LOGGER.info("exchangeCoupon Start:"+couponId+";"+memberId+";"+lenovoId);
+        LOGGER.info("exchangeCoupon Start:"+shopId+";"+couponId+";"+memberId+";"+lenovoId);
 
         RemoteResult remoteResult = new RemoteResult();
 
@@ -87,8 +87,15 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             SalescouponsApi salescouponsApi = salescouponsById.getT();
 
             //获取优惠券绑定的商品code数组
-            String goodcodes = salescouponsApi.getGoodcodes();
-            String[] split = goodcodes.split(",");
+            ProductruleApi productruleApi = salescouponsApi.getProductruleApi();
+            if (productruleApi==null){
+                remoteResult.setResultCode(IntegralResultCode.PARAMS_FAIL);
+                remoteResult.setResultMsg("参数错误！");
+                LOGGER.error(JacksonUtil.toJson(salescouponsById)+";"+couponId);
+                return remoteResult;
+            }
+            String goodscodes = productruleApi.getGoodscodes();
+            String[] split = goodscodes.split(",");
             Integer[] codes = new Integer[split.length];
             for (int i = 0; i < split.length; i++) {
                 codes[i] = Integer.parseInt(split[i]);
@@ -108,7 +115,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             //查询优惠券绑定的积分信息
             CouponAndIntegralInfo couponInfo = couponAndIntegralInfoManager.getCouponInfo(couponId);
             if (couponInfo==null){
-                remoteResult.setResultCode(IntegralResultCode.PARAMS_FAIL);
+                remoteResult.setResultCode(IntegralResultCode.SELECT_FAIL);
                 remoteResult.setResultMsg("没有查到绑定记录");
                 LOGGER.info("exchangeCoupon End:"+ JacksonUtil.toJson(remoteResult));
                 return remoteResult;
@@ -145,25 +152,21 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             try {
                 String md5 = MD5.sign(lenovoId + memberId + couponId, MD5_KEY, "UTF-8");
 
-                String path = propertiesUtil.getCouponBindingUrl()+"?lenovoId="+lenovoId+"&couponId="+couponId+"&memberCode="+memberId+"&shopId="+shopId+"&sign="+md5;
+                COUPONLOGGER.info("绑优惠券接口参数 :"+shopId+";"+couponId+";"+lenovoId+";"+memberId);
 
-                COUPONLOGGER.info("绑优惠券接口参数 :"+path);
-                String resultJson = HttpConnectionUtil.getHttpContentGet(path);
-                COUPONLOGGER.info("绑优惠券接口返回 :"+resultJson);
+                Tenant tenant = new Tenant();
+                tenant.setShopId(Integer.parseInt(shopId));
+                RemoteResult<Boolean> booleanRemoteResult = salescouponsService.bindCoupons(tenant, Long.parseLong(couponId), lenovoId, memberId);
 
-                //解析绑券返回值
-                JSONObject jsonObject = JSONObject.parseObject(resultJson);
-                String success = jsonObject.getString("success");
-                if ("false".equals(success)){
+                COUPONLOGGER.info("绑优惠券接口返回 :" + JacksonUtil.toJson(booleanRemoteResult));
+
+                if (!booleanRemoteResult.isSuccess()){
                     //绑券失败，将扣减的积分回滚
                     MemPointsRollbackResult rollback = memPointsClient.rollback(mppay.getRecordId());
                     if (!"00000".equals(rollback.getCode())){
                         //回滚失败，打印日志
                         INTEGRALLOGGER.error(JacksonUtil.toJson(rollback)+";"+mppay.getRecordId());
                     }
-
-                    //打印绑券失败日志
-                    COUPONLOGGER.error(resultJson + ";" + path);
 
                     remoteResult.setResultCode(IntegralResultCode.BINDING_FAIL);
                     remoteResult.setResultMsg("绑券失败！");
@@ -180,7 +183,9 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
 
                 remoteResult.setResultCode(IntegralResultCode.FAIL);
                 remoteResult.setResultMsg("系统异常！");
-                LOGGER.error(e.getMessage(),e);
+                LOGGER.error(e.getMessage(), e);
+                LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
+                return remoteResult;
             }
 
             //绑券成功，存储兑换记录
