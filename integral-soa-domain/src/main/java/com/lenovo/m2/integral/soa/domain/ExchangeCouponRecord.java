@@ -11,13 +11,30 @@ import java.util.Date;
 public class ExchangeCouponRecord implements Serializable {
 
     private String uuid;//uuid生成主键
-    private String memberId;//兑换人id
+    private String agentId;//兑换人id
     private Date exchangetime;//兑换时间
     private Integer integralNum;//兑换使用积分
     private String couponId;//优惠券id
     private String couponName;//优惠券名称
     private Money couponMoney;//优惠券金额
     private String currencyCode;//货币编码
+    private String agentCode;//兑换人code
+
+    public String getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
+    }
+
+    public String getAgentCode() {
+        return agentCode;
+    }
+
+    public void setAgentCode(String agentCode) {
+        this.agentCode = agentCode;
+    }
 
     public Date getExchangetime() {
         return exchangetime;
@@ -41,14 +58,6 @@ public class ExchangeCouponRecord implements Serializable {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(String memberId) {
-        this.memberId = memberId;
     }
 
     public Integer getIntegralNum() {

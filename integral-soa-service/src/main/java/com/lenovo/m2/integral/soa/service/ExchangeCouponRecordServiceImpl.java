@@ -55,14 +55,14 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
     /**
      * 详情页立即兑换接口，兑换优惠券
      * @param couponId 优惠券id
-     * @param memberId 兑换人id
-     * @param lenovoId 经销商id
+     * @param agentId 兑换人id
+     * @param buyerId 经销商id
      * @return
      */
     @Override
-    public RemoteResult exchangeCoupon(String shopId,String couponId, String memberId, String lenovoId) {
+    public RemoteResult exchangeCoupon(String shopId,String couponId, String agentId,String agentCode, String buyerId) {
 
-        LOGGER.info("exchangeCoupon Start:"+shopId+";"+couponId+";"+memberId+";"+lenovoId);
+        LOGGER.info("exchangeCoupon Start:"+shopId+";"+couponId+";"+agentId+";"+agentCode+";"+buyerId);
 
         RemoteResult remoteResult = new RemoteResult();
 
@@ -93,7 +93,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             }
 
             //判断该用户是否可以购买这些商品
-            Integer[] integers = ProductRedis.filterProducts(codes, lenovoId);
+            Integer[] integers = ProductRedis.filterProducts(codes, buyerId);
 
             if (integers.length==0){
                 //如果一件都买不了，那么该用户无法兑换此优惠券
@@ -116,8 +116,8 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 
             //扣减积分
-            INTEGRALLOGGER.info("扣减积分接口参数 :CVCP;"+lenovoId+";"+memberId+";"+couponInfo.getIntegralNum()+";"+uuid);
-            MemPointsWriteResult mppay = memPointsClient.write("CVCP", lenovoId, memberId, couponInfo.getIntegralNum(), "{\"bask_work_order\":\"" + uuid + "\"}");
+            INTEGRALLOGGER.info("扣减积分接口参数 :CVCP;"+buyerId+";"+agentId+";"+couponInfo.getIntegralNum()+";"+uuid);
+            MemPointsWriteResult mppay = memPointsClient.write("CVCP", buyerId, agentId, couponInfo.getIntegralNum(), "{\"bask_work_order\":\"" + uuid + "\"}");
             INTEGRALLOGGER.info("扣减积分接口返回 :"+JacksonUtil.toJson(mppay));
 
             String code = mppay.getCode();
@@ -141,11 +141,11 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
 
             //积分扣减成功了，下一步绑定优惠券
             try {
-                COUPONLOGGER.info("绑优惠券接口参数 :"+shopId+";"+couponId+";"+lenovoId+";"+memberId);
+                COUPONLOGGER.info("绑优惠券接口参数 :"+shopId+";"+couponId+";"+buyerId+";"+agentId);
 
                 Tenant tenant = new Tenant();
                 tenant.setShopId(Integer.parseInt(shopId));
-                RemoteResult<Boolean> booleanRemoteResult = salescouponsService.bindCoupons(tenant, Long.parseLong(couponId), lenovoId, memberId);
+                RemoteResult<Boolean> booleanRemoteResult = salescouponsService.bindCoupons(tenant, Long.parseLong(couponId), buyerId, agentId);
 
                 COUPONLOGGER.info("绑优惠券接口返回 :" + JacksonUtil.toJson(booleanRemoteResult));
 
@@ -187,7 +187,8 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             exchangeCouponRecord.setCouponName(salescouponsApi.getName());
             exchangeCouponRecord.setIntegralNum(couponInfo.getIntegralNum());
             exchangeCouponRecord.setExchangetime(date);
-            exchangeCouponRecord.setMemberId(memberId);
+            exchangeCouponRecord.setAgentId(agentId);
+            exchangeCouponRecord.setAgentCode(agentCode);
 
             exchangeCouponRecordManager.addExchangeRecord(exchangeCouponRecord);
 

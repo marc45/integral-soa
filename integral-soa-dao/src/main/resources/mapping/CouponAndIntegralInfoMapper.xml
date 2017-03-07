@@ -22,7 +22,9 @@
             create_time,
             update_id,
             update_time,
-            state)
+            state,
+            createCode,
+            updateCode)
         values
             (#{couponId},
             #{couponName},
@@ -39,13 +41,15 @@
             #{createtime},
             #{updateId},
             #{updatetime},
-            #{state})
+            #{state},
+            #{createCode},
+            #{updateCode})
     </insert>
 
     <sql id="allColumn">
         coupon_id,coupon_name,coupon_money,fromtime,totime,use_scope,platform,
         getstarttime,getendtime,integral_number,maxnumber,create_id,create_time,
-        update_id,update_time,state,currencyCode
+        update_id,update_time,state,currencyCode,createCode,updateCode
     </sql>
 
     <select id="getCouponInfo" parameterType="java.lang.String" resultMap="couponInfoResultMap">
@@ -114,6 +118,8 @@
         <result column="update_time" property="updatetime"/>
         <result column="state" property="state"/>
         <result column="currencyCode" property="currencyCode"/>
+        <result column="createCode" property="createCode"/>
+        <result column="updateCode" property="updateCode"/>
     </resultMap>
 
     <update id="updateCouponInfo" parameterType="com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo">
@@ -122,6 +128,7 @@
             <if test="integralNum!=null">integral_number=#{integralNum},</if>
             <if test="state!=null">state=#{state},</if>
             <if test="updateId!=null">update_id=#{updateId},</if>
+            <if test="updateCode!=null">updateCode=#{updateCode},</if>
             <if test="updatetime!=null">update_time=#{updatetime},</if>
         </set>
         WHERE coupon_id=#{couponId}

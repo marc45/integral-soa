@@ -86,14 +86,14 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
     /**
      * 添加优惠券和积分的绑定信息
      * @param couponId 优惠券id
-     * @param memberId 绑定人id
+     * @param agentId 绑定人id
      * @param integralNum 积分数量
      * @param state 是否显示，0不显示，1显示
      * @return
      */
     @Override
-    public RemoteResult addCouponInfo(String couponId, String memberId, Integer integralNum, Integer state) {
-        LOGGER.info("addCouponInfo Start:"+couponId+";"+memberId+";"+integralNum+";"+state);
+    public RemoteResult addCouponInfo(String couponId, String agentId, String agentCode, Integer integralNum, Integer state) {
+        LOGGER.info("addCouponInfo Start:"+couponId+";"+agentId+";"+agentCode+";"+integralNum+";"+state);
 
         RemoteResult remoteResult = new RemoteResult();
 
@@ -117,7 +117,8 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             couponAndIntegralInfo.setCouponId(couponId);
             couponAndIntegralInfo.setCouponMoney(salescouponsApi.getAmount());
             couponAndIntegralInfo.setCouponName(salescouponsApi.getName());
-            couponAndIntegralInfo.setCreateId(memberId);
+            couponAndIntegralInfo.setCreateId(agentId);
+            couponAndIntegralInfo.setCreateCode(agentCode);
             couponAndIntegralInfo.setCreatetime(date);
             couponAndIntegralInfo.setFromtime(salescouponsApi.getFromtime());
             couponAndIntegralInfo.setTotime(salescouponsApi.getTotime());
@@ -127,7 +128,8 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             couponAndIntegralInfo.setMaxNum(salescouponsApi.getMaxnumber());
             couponAndIntegralInfo.setPlatform(salescouponsApi.getTerminal());
             couponAndIntegralInfo.setUseScope(salescouponsApi.getDescription());
-            couponAndIntegralInfo.setUpdateId(memberId);
+            couponAndIntegralInfo.setUpdateId(agentId);
+            couponAndIntegralInfo.setUpdateCode(agentCode);
             couponAndIntegralInfo.setUpdatetime(date);
             couponAndIntegralInfo.setState(state);
 
@@ -178,14 +180,14 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
 
     /**
      * 修改绑定记录，只能修改积分数量或者是否显示
-     * @param memberId 修改人id
+     * @param agentId 修改人id
      * @param integralNum 积分数量
      * @param state 是否显示，0不显示，1显示
      * @return
      */
     @Override
-    public RemoteResult updateCouponInfo(String couponId,String memberId, Integer integralNum, Integer state) {
-        LOGGER.info("updateCouponInfo Start:"+memberId+";"+integralNum+";"+state);
+    public RemoteResult updateCouponInfo(String couponId,String agentId,String agentCode,Integer integralNum, Integer state) {
+        LOGGER.info("updateCouponInfo Start:"+couponId+";"+agentId+";"+agentCode+";"+integralNum+";"+state);
 
         RemoteResult remoteResult = new RemoteResult();
 
@@ -193,7 +195,8 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             CouponAndIntegralInfo couponAndIntegralInfo = new CouponAndIntegralInfo();
             Date date = new Date();
             couponAndIntegralInfo.setUpdatetime(date);
-            couponAndIntegralInfo.setUpdateId(memberId);
+            couponAndIntegralInfo.setUpdateId(agentId);
+            couponAndIntegralInfo.setUpdateCode(agentCode);
             couponAndIntegralInfo.setIntegralNum(integralNum);
             couponAndIntegralInfo.setState(state);
             couponAndIntegralInfo.setCouponId(couponId);
