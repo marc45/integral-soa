@@ -124,7 +124,6 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             if ("10006".equals(code)){
                 //用户积分不够扣减
                 INTEGRALLOGGER.error(JacksonUtil.toJson(mppay));
-
                 remoteResult.setResultCode(IntegralResultCode.INTEGRAL_LACK);
                 remoteResult.setResultMsg(mppay.getMessage());
                 LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
