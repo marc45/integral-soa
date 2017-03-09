@@ -20,6 +20,9 @@ public class ExchangeCouponRecord implements Serializable {
     private String currencyCode;//货币编码
     private String agentCode;//兑换人code
 
+    private Date begintime;//分页查询开始时间
+    private Date endtime;//分页查询截止时间
+
     public String getAgentId() {
         return agentId;
     }

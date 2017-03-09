@@ -138,7 +138,50 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
                 return remoteResult;
             }
 
-            //积分扣减成功了，下一步绑定优惠券
+            //扣减积分成功，先存储兑换记录，再绑优惠券
+            try {
+                Date date = new Date();
+
+                ExchangeCouponRecord exchangeCouponRecord = new ExchangeCouponRecord();
+                exchangeCouponRecord.setUuid(uuid);
+                exchangeCouponRecord.setCouponId(couponId);
+                exchangeCouponRecord.setCouponMoney(salescouponsApi.getAmount());
+                exchangeCouponRecord.setCouponName(salescouponsApi.getName());
+                exchangeCouponRecord.setIntegralNum(couponInfo.getIntegralNum());
+                exchangeCouponRecord.setExchangetime(date);
+                exchangeCouponRecord.setAgentId(agentId);
+                exchangeCouponRecord.setAgentCode(agentCode);
+
+                int i = exchangeCouponRecordManager.addExchangeRecord(exchangeCouponRecord);
+                if (i==0){
+                    //存储记录失败，将扣减的积分回滚
+                    MemPointsRollbackResult rollback = memPointsClient.rollback(mppay.getRecordId());
+                    if (!"00000".equals(rollback.getCode())){
+                        //回滚失败，打印日志
+                        INTEGRALLOGGER.error("积分回滚失败 : "+JacksonUtil.toJson(rollback)+";"+mppay.getRecordId());
+                    }
+
+                    remoteResult.setResultCode(IntegralResultCode.EXCHANGERECORD_SAVEFAIL);
+                    remoteResult.setResultMsg("兑换记录存储失败！");
+                    LOGGER.error("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
+                    return remoteResult;
+                }
+            }catch (Exception e){
+                //出现异常，回滚积分
+                MemPointsRollbackResult rollback = memPointsClient.rollback(mppay.getRecordId());
+                if (!"00000".equals(rollback.getCode())){
+                    //回滚失败，打印日志
+                    INTEGRALLOGGER.error("积分回滚失败 : "+JacksonUtil.toJson(rollback)+";"+mppay.getRecordId());
+                }
+
+                remoteResult.setResultCode(IntegralResultCode.FAIL);
+                remoteResult.setResultMsg("系统异常！");
+                LOGGER.error(e.getMessage(), e);
+                LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
+                return remoteResult;
+            }
+
+            //兑换记录存储完成，下一步绑定优惠券
             try {
                 COUPONLOGGER.info("绑优惠券接口参数 :"+shopId+";"+couponId+";"+buyerId+";"+agentId);
 
@@ -153,7 +196,14 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
                     MemPointsRollbackResult rollback = memPointsClient.rollback(mppay.getRecordId());
                     if (!"00000".equals(rollback.getCode())){
                         //回滚失败，打印日志
-                        INTEGRALLOGGER.error(JacksonUtil.toJson(rollback)+";"+mppay.getRecordId());
+                        INTEGRALLOGGER.error("积分回滚失败 : "+JacksonUtil.toJson(rollback)+";"+mppay.getRecordId());
+                    }
+
+                    //删除存储的兑换记录
+                    int i = exchangeCouponRecordManager.deleteExchangeRecord(uuid);
+                    if (i==0){
+                        //删除失败，打印日志
+                        COUPONLOGGER.error("删除兑换记录失败 : "+uuid);
                     }
 
                     remoteResult.setResultCode(IntegralResultCode.BINDING_FAIL);
@@ -166,7 +216,14 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
                 MemPointsRollbackResult rollback = memPointsClient.rollback(mppay.getRecordId());
                 if (!"00000".equals(rollback.getCode())){
                     //回滚失败，打印日志
-                    INTEGRALLOGGER.error(JacksonUtil.toJson(rollback)+";"+mppay.getRecordId());
+                    INTEGRALLOGGER.error("积分回滚失败 : "+JacksonUtil.toJson(rollback)+";"+mppay.getRecordId());
+                }
+
+                //删除存储的兑换记录
+                int i = exchangeCouponRecordManager.deleteExchangeRecord(uuid);
+                if (i==0){
+                    //删除失败，打印日志
+                    COUPONLOGGER.error("删除兑换记录失败 : "+uuid);
                 }
 
                 remoteResult.setResultCode(IntegralResultCode.FAIL);
@@ -175,21 +232,6 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
                 LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
                 return remoteResult;
             }
-
-            //绑券成功，存储兑换记录
-            Date date = new Date();
-
-            ExchangeCouponRecord exchangeCouponRecord = new ExchangeCouponRecord();
-            exchangeCouponRecord.setUuid(uuid);
-            exchangeCouponRecord.setCouponId(couponId);
-            exchangeCouponRecord.setCouponMoney(salescouponsApi.getAmount());
-            exchangeCouponRecord.setCouponName(salescouponsApi.getName());
-            exchangeCouponRecord.setIntegralNum(couponInfo.getIntegralNum());
-            exchangeCouponRecord.setExchangetime(date);
-            exchangeCouponRecord.setAgentId(agentId);
-            exchangeCouponRecord.setAgentCode(agentCode);
-
-            exchangeCouponRecordManager.addExchangeRecord(exchangeCouponRecord);
 
             remoteResult.setSuccess(true);
             remoteResult.setResultMsg("兑换成功");

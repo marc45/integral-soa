@@ -11,6 +11,8 @@ public interface ExchangeCouponRecordManager {
 
     public int addExchangeRecord(ExchangeCouponRecord exchangeCouponRecord);
 
+    public int deleteExchangeRecord(String uuid);
+
     public ExchangeCouponRecord getExchangeRecord(String uuid);
 
     public PageModel2<ExchangeCouponRecord> getExchangeRecordByPage(PageQuery pageQuery,ExchangeCouponRecord exchangeCouponRecord);

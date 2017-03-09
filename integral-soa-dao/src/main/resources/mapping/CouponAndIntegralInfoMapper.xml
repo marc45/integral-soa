@@ -72,28 +72,28 @@
           <include refid="allColumn"/>
         FROM integral_coupon
         <where>
-            <if test="param2.couponId!=null">
+            <if test="param2.couponId!=null and param2.couponId!=''">
                 and coupon_id=#{param2.couponId}
             </if>
-            <if test="param2.couponName!=null">
+            <if test="param2.couponName!=null and param2.couponName!=''">
                 <![CDATA[ and coupon_name like '%${param2.couponName}%' ]]>
             </if>
-            <if test="param2.couponMoney!=null">
+            <if test="param2.couponMoney!=null and param2.couponMoney!=''">
                 and coupon_money=#{param2.couponMoney}
             </if>
-            <if test="param2.integralNum!=null">
+            <if test="param2.integralNum!=null and param2.integralNum!=''">
                 and integral_number=#{param2.integralNum}
             </if>
-            <if test="param2.fromtime!=null">
+            <if test="param2.fromtime!=null and param2.fromtime!=''">
                 and fromtime>#{param2.fromtime}
             </if>
-            <if test="param2.totime!=null">
+            <if test="param2.totime!=null and param2.totime!=''">
                 <![CDATA[ and totime<#{param2.totime} ]]>
             </if>
-            <if test="param2.getstarttime!=null">
+            <if test="param2.getstarttime!=null and param2.getstarttime!=''">
                 and getstarttime>#{param2.getstarttime}
             </if>
-            <if test="param2.getendtime!=null">
+            <if test="param2.getendtime!=null and param2.getendtime!=''">
                 <![CDATA[ and getendtime<#{param2.getendtime} ]]>
             </if>
         </where>

@@ -26,6 +26,10 @@
             #{agentCode})
     </insert>
 
+    <delete id="deleteExchangeRecord" parameterType="java.lang.String">
+        DELETE FROM integral_exchange WHERE id=#{uuid}
+    </delete>
+
     <select id="getExchangeRecord" parameterType="java.lang.String" resultMap="exchangeRecordResultMap">
         SELECT id,agentId,integral_number,exchange_time,coupon_id,coupon_name,coupon_money,currencyCode,agentCode
         FROM integral_exchange
@@ -35,7 +39,9 @@
     <select id="getExchangeRecordByPage" parameterType="com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord" resultMap="exchangeRecordResultMap">
         SELECT id,agentId,integral_number,exchange_time,coupon_id,coupon_name,coupon_money,currencyCode,agentCode
         FROM integral_exchange
-        WHERE agentId=#{agentId}
+        WHERE agentId=#{agentId} AND agentCode=#{agentCode}
+        <if test="begintime!=null"> AND exchange_time>#{begintime}</if>
+        <if test="endtime!=null"> AND exchange_time&lt;#{endtime}</if>
         ORDER BY exchange_time DESC
     </select>
 

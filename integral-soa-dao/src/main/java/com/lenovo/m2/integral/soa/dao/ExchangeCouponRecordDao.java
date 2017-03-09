@@ -11,6 +11,8 @@ public interface ExchangeCouponRecordDao {
 
     public int addExchangeRecord(ExchangeCouponRecord exchangeCouponRecord);
 
+    public int deleteExchangeRecord(String uuid);
+
     public ExchangeCouponRecord getExchangeRecord(String uuid);
 
     public PageModel<ExchangeCouponRecord> getExchangeRecordByPage(PageQuery pageQuery,ExchangeCouponRecord exchangeCouponRecord);

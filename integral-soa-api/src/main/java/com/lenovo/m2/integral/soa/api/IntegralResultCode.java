@@ -23,6 +23,8 @@ public class IntegralResultCode {
 
     public static final String isExist = "1008";//已存在该优惠券的绑定记录，不能重复绑定
 
+    public static final String EXCHANGERECORD_SAVEFAIL = "1009";//兑换记录存储失败
+
     public static final String FAIL = "9999";//系统异常
 
 

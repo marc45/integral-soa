@@ -26,6 +26,11 @@ public class ExchangeCouponRecordManagerImpl implements ExchangeCouponRecordMana
     }
 
     @Override
+    public int deleteExchangeRecord(String uuid) {
+        return exchangeCouponRecordDao.deleteExchangeRecord(uuid);
+    }
+
+    @Override
     public ExchangeCouponRecord getExchangeRecord(String uuid) {
         return exchangeCouponRecordDao.getExchangeRecord(uuid);
     }

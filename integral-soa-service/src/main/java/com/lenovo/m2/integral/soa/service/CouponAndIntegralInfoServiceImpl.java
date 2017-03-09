@@ -102,7 +102,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             if (couponInfo!=null){
                 remoteResult.setResultCode(IntegralResultCode.isExist);
                 remoteResult.setResultMsg("该优惠券绑定记录已存在，不能重复添加！");
-                LOGGER.error(JacksonUtil.toJson(couponInfo));
+                LOGGER.error("addCouponInfo End:" + JacksonUtil.toJson(couponInfo));
                 return remoteResult;
             }
 
@@ -142,7 +142,14 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             couponAndIntegralInfo.setState(state);
 
             //添加绑定记录
-            couponAndIntegralInfoManager.addCouponInfo(couponAndIntegralInfo);
+            int i = couponAndIntegralInfoManager.addCouponInfo(couponAndIntegralInfo);
+
+            if (i==0){
+                remoteResult.setResultCode(IntegralResultCode.FAIL);
+                remoteResult.setResultMsg("绑定失败");
+                LOGGER.error("addCouponInfo End:" + JacksonUtil.toJson(remoteResult));
+                return remoteResult;
+            }
 
             remoteResult.setSuccess(true);
             remoteResult.setResultCode(IntegralResultCode.SUCCESS);
@@ -209,7 +216,14 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             couponAndIntegralInfo.setState(state);
             couponAndIntegralInfo.setCouponId(couponId);
 
-            couponAndIntegralInfoManager.updateCouponInfo(couponAndIntegralInfo);
+            int i = couponAndIntegralInfoManager.updateCouponInfo(couponAndIntegralInfo);
+
+            if (i==0){
+                remoteResult.setResultCode(IntegralResultCode.SUCCESS);
+                remoteResult.setResultMsg("修改失败");
+                LOGGER.info("updateCouponInfo End:" + JacksonUtil.toJson(remoteResult));
+                return remoteResult;
+            }
 
             remoteResult.setSuccess(true);
             remoteResult.setResultCode(IntegralResultCode.SUCCESS);
