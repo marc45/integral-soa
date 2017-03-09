@@ -98,6 +98,14 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
         RemoteResult remoteResult = new RemoteResult();
 
         try {
+            CouponAndIntegralInfo couponInfo = couponAndIntegralInfoManager.getCouponInfo(couponId);
+            if (couponInfo!=null){
+                remoteResult.setResultCode(IntegralResultCode.isExist);
+                remoteResult.setResultMsg("该优惠券绑定记录已存在，不能重复添加！");
+                LOGGER.error(JacksonUtil.toJson(couponInfo));
+                return remoteResult;
+            }
+
             Date date = new Date();
 
             //调用优惠券接口，获取优惠券信息
