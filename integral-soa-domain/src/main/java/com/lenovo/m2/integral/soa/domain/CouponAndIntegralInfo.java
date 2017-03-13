@@ -22,32 +22,14 @@ public class CouponAndIntegralInfo implements Serializable {
     private Integer integralNum;//兑换所需积分
     private Integer maxNum;//最大发放张数
     private String createId;//创建人id
-    private String createCode;//创建人code
     private Date createtime;//创建时间
     private String updateId;//修改人id
-    private String updateCode;//修改人code
     private Date updatetime;//修改时间
     private Integer state;//是否启用，0停用，1启用
     private String currencyCode;//货币编码
 
     private Date date;//当前时间
     private Integer sellout;//是否还有剩余
-
-    public String getCreateCode() {
-        return createCode;
-    }
-
-    public void setCreateCode(String createCode) {
-        this.createCode = createCode;
-    }
-
-    public String getUpdateCode() {
-        return updateCode;
-    }
-
-    public void setUpdateCode(String updateCode) {
-        this.updateCode = updateCode;
-    }
 
     public String getCurrencyCode() {
         return currencyCode;

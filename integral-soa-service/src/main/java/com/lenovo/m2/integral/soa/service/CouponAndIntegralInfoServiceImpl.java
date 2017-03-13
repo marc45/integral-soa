@@ -10,6 +10,7 @@ import com.lenovo.m2.integral.soa.api.IntegralResultCode;
 import com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo;
 import com.lenovo.m2.integral.soa.manager.CouponAndIntegralInfoManager;
 import com.lenovo.m2.integral.soa.utils.JacksonUtil;
+import com.lenovo.m2.integral.soa.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,13 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
         RemoteResult<CouponAndIntegralInfo> remoteResult = new RemoteResult<CouponAndIntegralInfo>();
 
         try {
+            if (StringUtil.isEmpty(couponId)){
+                remoteResult.setResultCode(IntegralResultCode.PARAMS_FAIL);
+                remoteResult.setResultMsg("参数错误！");
+                LOGGER.error("getCouponInfo End:" + JacksonUtil.toJson(remoteResult));
+                return remoteResult;
+            }
+
             //调用优惠券接口，获取优惠券信息
             RemoteResult<SalescouponsApi> salescouponsById = salescouponsService.getSalescouponsById(Long.parseLong(couponId));
             if (!salescouponsById.isSuccess()){
@@ -86,14 +94,14 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
     /**
      * 添加优惠券和积分的绑定信息
      * @param couponId 优惠券id
-     * @param agentId 绑定人id
+     * @param itcode 绑定人id
      * @param integralNum 积分数量
      * @param state 是否显示，0不显示，1显示
      * @return
      */
     @Override
-    public RemoteResult addCouponInfo(String couponId, String agentId, String agentCode, Integer integralNum, Integer state) {
-        LOGGER.info("addCouponInfo Start:"+couponId+";"+agentId+";"+agentCode+";"+integralNum+";"+state);
+    public RemoteResult addCouponInfo(String couponId, String itcode, Integer integralNum, Integer state) {
+        LOGGER.info("addCouponInfo Start:"+couponId+";"+itcode+";"+integralNum+";"+state);
 
         RemoteResult remoteResult = new RemoteResult();
 
@@ -125,8 +133,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             couponAndIntegralInfo.setCouponId(couponId);
             couponAndIntegralInfo.setCouponMoney(salescouponsApi.getAmount());
             couponAndIntegralInfo.setCouponName(salescouponsApi.getName());
-            couponAndIntegralInfo.setCreateId(agentId);
-            couponAndIntegralInfo.setCreateCode(agentCode);
+            couponAndIntegralInfo.setCreateId(itcode);
             couponAndIntegralInfo.setCreatetime(date);
             couponAndIntegralInfo.setFromtime(salescouponsApi.getFromtime());
             couponAndIntegralInfo.setTotime(salescouponsApi.getTotime());
@@ -136,8 +143,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             couponAndIntegralInfo.setMaxNum(salescouponsApi.getMaxnumber());
             couponAndIntegralInfo.setPlatform(salescouponsApi.getTerminal());
             couponAndIntegralInfo.setUseScope(salescouponsApi.getDescription());
-            couponAndIntegralInfo.setUpdateId(agentId);
-            couponAndIntegralInfo.setUpdateCode(agentCode);
+            couponAndIntegralInfo.setUpdateId(itcode);
             couponAndIntegralInfo.setUpdatetime(date);
             couponAndIntegralInfo.setState(state);
 
@@ -195,14 +201,14 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
 
     /**
      * 修改绑定记录，只能修改积分数量或者是否显示
-     * @param agentId 修改人id
+     * @param itcode 修改人id
      * @param integralNum 积分数量
      * @param state 是否显示，0不显示，1显示
      * @return
      */
     @Override
-    public RemoteResult updateCouponInfo(String couponId,String agentId,String agentCode,Integer integralNum, Integer state) {
-        LOGGER.info("updateCouponInfo Start:"+couponId+";"+agentId+";"+agentCode+";"+integralNum+";"+state);
+    public RemoteResult updateCouponInfo(String couponId,String itcode,Integer integralNum, Integer state) {
+        LOGGER.info("updateCouponInfo Start:"+couponId+";"+itcode+";"+integralNum+";"+state);
 
         RemoteResult remoteResult = new RemoteResult();
 
@@ -210,8 +216,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             CouponAndIntegralInfo couponAndIntegralInfo = new CouponAndIntegralInfo();
             Date date = new Date();
             couponAndIntegralInfo.setUpdatetime(date);
-            couponAndIntegralInfo.setUpdateId(agentId);
-            couponAndIntegralInfo.setUpdateCode(agentCode);
+            couponAndIntegralInfo.setUpdateId(itcode);
             couponAndIntegralInfo.setIntegralNum(integralNum);
             couponAndIntegralInfo.setState(state);
             couponAndIntegralInfo.setCouponId(couponId);

@@ -14,6 +14,7 @@ import com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord;
 import com.lenovo.m2.integral.soa.manager.CouponAndIntegralInfoManager;
 import com.lenovo.m2.integral.soa.manager.ExchangeCouponRecordManager;
 import com.lenovo.m2.integral.soa.utils.JacksonUtil;
+import com.lenovo.m2.integral.soa.utils.StringUtil;
 import com.lenovo.points.client.MemPointsClient;
 import com.lenovo.points.vo.MemPointsRollbackResult;
 import com.lenovo.points.vo.MemPointsWriteResult;
@@ -67,6 +68,13 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
         RemoteResult remoteResult = new RemoteResult();
 
         try {
+            if (StringUtil.isEmpty(shopId) || StringUtil.isEmpty(couponId) || StringUtil.isEmpty(agentId) || StringUtil.isEmpty(agentCode) || StringUtil.isEmpty(buyerId)){
+                remoteResult.setResultCode(IntegralResultCode.PARAMS_FAIL);
+                remoteResult.setResultMsg("参数错误！");
+                LOGGER.error("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
+                return remoteResult;
+            }
+
             //根据优惠券id获取优惠券信息
             RemoteResult<SalescouponsApi> salescouponsById = salescouponsService.getSalescouponsById(Long.parseLong(couponId));
             if (!salescouponsById.isSuccess()){
