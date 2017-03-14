@@ -18,6 +18,7 @@ import com.lenovo.m2.integral.soa.utils.StringUtil;
 import com.lenovo.points.client.MemPointsClient;
 import com.lenovo.points.vo.MemPointsRollbackResult;
 import com.lenovo.points.vo.MemPointsWriteResult;
+import com.lenovo.price.model.ProductDetail;
 import com.lenovo.products.cache.ProductRedis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -101,9 +103,9 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             }
 
             //判断该用户是否可以购买这些商品
-            Integer[] integers = ProductRedis.filterProducts(codes, buyerId);
+            List<ProductDetail> productDetails = ProductRedis.filter4ProductDetails(codes, buyerId);
 
-            if (integers.length==0){
+            if (productDetails ==null || productDetails.size()==0){
                 //如果一件都买不了，那么该用户无法兑换此优惠券
                 remoteResult.setResultCode(IntegralResultCode.COUPON_UNUSABLE);
                 remoteResult.setResultMsg("签约关系不满足兑换此优惠券！");
