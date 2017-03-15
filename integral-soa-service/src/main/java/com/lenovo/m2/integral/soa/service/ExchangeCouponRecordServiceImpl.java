@@ -73,7 +73,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             if (StringUtil.isEmpty(shopId) || StringUtil.isEmpty(couponId) || StringUtil.isEmpty(agentId) || StringUtil.isEmpty(agentCode) || StringUtil.isEmpty(buyerId)){
                 remoteResult.setResultCode(IntegralResultCode.PARAMS_FAIL);
                 remoteResult.setResultMsg("参数错误！");
-                LOGGER.error("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
+                LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
                 return remoteResult;
             }
 
@@ -92,7 +92,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             if (productruleApi==null){
                 remoteResult.setResultCode(IntegralResultCode.PARAMS_FAIL);
                 remoteResult.setResultMsg("参数错误！");
-                LOGGER.error(JacksonUtil.toJson(salescouponsById)+";"+couponId);
+                LOGGER.info(JacksonUtil.toJson(salescouponsById)+";"+couponId);
                 return remoteResult;
             }
             String goodscodes = productruleApi.getGoodscodes();
@@ -133,14 +133,14 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             String code = mppay.getCode();
             if ("10006".equals(code)){
                 //用户积分不够扣减
-                INTEGRALLOGGER.error(JacksonUtil.toJson(mppay));
+                INTEGRALLOGGER.info(JacksonUtil.toJson(mppay));
                 remoteResult.setResultCode(IntegralResultCode.INTEGRAL_LACK);
                 remoteResult.setResultMsg(mppay.getMessage());
                 LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
                 return remoteResult;
             }else if (!"00000".equals(code)){
                 //积分扣减失败
-                INTEGRALLOGGER.error(JacksonUtil.toJson(mppay));
+                INTEGRALLOGGER.info(JacksonUtil.toJson(mppay));
 
                 remoteResult.setResultCode(IntegralResultCode.INTEGRAL_DEC_FAIL);
                 remoteResult.setResultMsg(mppay.getMessage());
@@ -173,7 +173,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
 
                     remoteResult.setResultCode(IntegralResultCode.EXCHANGERECORD_SAVEFAIL);
                     remoteResult.setResultMsg("兑换记录存储失败！");
-                    LOGGER.error("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
+                    LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
                     return remoteResult;
                 }
             }catch (Exception e){
