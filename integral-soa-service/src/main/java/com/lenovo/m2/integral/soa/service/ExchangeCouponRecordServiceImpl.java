@@ -103,7 +103,9 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             }
 
             //判断该用户是否可以购买这些商品
+            LOGGER.info("filter4ProductDetails Start: ");
             List<ProductDetail> productDetails = ProductRedis.filter4ProductDetails(codes, buyerId);
+            LOGGER.info("filter4ProductDetails End:" + JacksonUtil.toJson(productDetails));
 
             if (productDetails ==null || productDetails.size()==0){
                 //如果一件都买不了，那么该用户无法兑换此优惠券
