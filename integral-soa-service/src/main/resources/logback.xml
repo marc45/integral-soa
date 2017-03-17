@@ -56,7 +56,7 @@
 
 
 
-    <root level="DEBUG">
+    <root level="info">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>
