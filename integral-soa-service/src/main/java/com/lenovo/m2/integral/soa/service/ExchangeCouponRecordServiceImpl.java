@@ -92,7 +92,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             if (productruleApi==null){
                 remoteResult.setResultCode(IntegralResultCode.PARAMS_FAIL);
                 remoteResult.setResultMsg("参数错误！");
-                LOGGER.info(JacksonUtil.toJson(salescouponsById)+";"+couponId);
+                LOGGER.info(JacksonUtil.toJson(productruleApi)+";"+couponId);
                 return remoteResult;
             }
             String goodscodes = productruleApi.getGoodscodes();

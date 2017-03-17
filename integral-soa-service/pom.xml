@@ -31,6 +31,28 @@
     </properties>
     <dependencies>
 
+
+
+        <!--商品接口，判断用户是否可以购买商品-->
+        <dependency>
+            <groupId>com.lenovo</groupId>
+            <artifactId>lenovo-product-redis</artifactId>
+            <version>3.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!--积分接口-->
+        <dependency>
+            <groupId>com.lenovo</groupId>
+            <artifactId>mem-points-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <dependency>
             <groupId>com.lenovo.m2.integral.soa</groupId>
             <artifactId>integral-soa-api</artifactId>
