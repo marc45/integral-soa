@@ -90,9 +90,9 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             //获取优惠券绑定的商品code数组
             ProductruleApi productruleApi = salescouponsApi.getProductruleApi();
             if (productruleApi==null){
-                remoteResult.setResultCode(IntegralResultCode.PARAMS_FAIL);
-                remoteResult.setResultMsg("参数错误！");
-                LOGGER.info(JacksonUtil.toJson(productruleApi)+";"+couponId);
+                remoteResult.setResultCode(IntegralResultCode.COUPON_NOT_BINGING_GOODS);
+                remoteResult.setResultMsg("该优惠券没有绑定商品！");
+                LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult)+";"+couponId);
                 return remoteResult;
             }
             String goodscodes = productruleApi.getGoodscodes();

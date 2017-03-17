@@ -25,6 +25,8 @@ public class IntegralResultCode {
 
     public static final String EXCHANGERECORD_SAVEFAIL = "1009";//兑换记录存储失败
 
+    public static final String COUPON_NOT_BINGING_GOODS = "1010";//优惠券没有绑定商品
+
     public static final String FAIL = "9999";//系统异常
 
 
