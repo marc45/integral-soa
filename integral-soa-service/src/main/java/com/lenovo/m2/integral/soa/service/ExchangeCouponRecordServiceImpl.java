@@ -195,11 +195,11 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
 
             //兑换记录存储完成，下一步绑定优惠券
             try {
-                COUPONLOGGER.info("绑优惠券接口参数 :"+shopId+";"+couponId+";"+buyerId+";"+agentId);
+                COUPONLOGGER.info("绑优惠券接口参数 :"+shopId+";"+couponId+";"+buyerId+";"+agentCode);
 
                 Tenant tenant = new Tenant();
                 tenant.setShopId(Integer.parseInt(shopId));
-                RemoteResult<Boolean> booleanRemoteResult = salescouponsService.bindCoupons(tenant, Long.parseLong(couponId), buyerId, agentId);
+                RemoteResult<Boolean> booleanRemoteResult = salescouponsService.bindCoupons(tenant, Long.parseLong(couponId), buyerId, agentCode);
 
                 COUPONLOGGER.info("绑优惠券接口返回 :" + JacksonUtil.toJson(booleanRemoteResult));
 
