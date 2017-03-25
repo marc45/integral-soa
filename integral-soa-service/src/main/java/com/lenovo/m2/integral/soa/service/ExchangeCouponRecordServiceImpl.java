@@ -133,19 +133,22 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             INTEGRALLOGGER.info("扣减积分接口返回 :"+JacksonUtil.toJson(mppay));
 
             String code = mppay.getCode();
-            if ("10006".equals(code)){
+            if ("10007".equals(code)){
                 //用户积分不够扣减
-                INTEGRALLOGGER.info(JacksonUtil.toJson(mppay));
+                remoteResult.setResultCode(IntegralResultCode.INTEGRAL_AMOUNT_LACK);
+                remoteResult.setResultMsg("您本季度可用积分已不足，详情见我的积分");
+                LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
+                return remoteResult;
+            } else if ("10006".equals(code)){
+                //用户积分不够扣减
                 remoteResult.setResultCode(IntegralResultCode.INTEGRAL_LACK);
                 remoteResult.setResultMsg(mppay.getMessage());
                 LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
                 return remoteResult;
             }else if (!"00000".equals(code)){
                 //积分扣减失败
-                INTEGRALLOGGER.info(JacksonUtil.toJson(mppay));
-
                 remoteResult.setResultCode(IntegralResultCode.INTEGRAL_DEC_FAIL);
-                remoteResult.setResultMsg(mppay.getMessage());
+                remoteResult.setResultMsg("积分扣减失败");
                 LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
                 return remoteResult;
             }

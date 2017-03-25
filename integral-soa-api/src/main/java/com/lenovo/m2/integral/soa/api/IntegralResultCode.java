@@ -27,6 +27,8 @@ public class IntegralResultCode {
 
     public static final String COUPON_NOT_BINGING_GOODS = "1010";//优惠券没有绑定商品
 
+    public static final String INTEGRAL_AMOUNT_LACK = "1011";//本季度积分额度不足
+
     public static final String FAIL = "9999";//系统异常
 
 
