@@ -59,7 +59,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             if (!salescouponsById.isSuccess()){
                 remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
                 remoteResult.setResultMsg("查询优惠券信息失败");
-                LOGGER.error(JacksonUtil.toJson(salescouponsById)+";"+couponId);
+                LOGGER.info("查询优惠券信息失败" + JacksonUtil.toJson(salescouponsById) + ";" + couponId);
                 return remoteResult;
             }
             SalescouponsApi salescouponsApi = salescouponsById.getT();
@@ -111,7 +111,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             if (couponInfo!=null){
                 remoteResult.setResultCode(IntegralResultCode.isExist);
                 remoteResult.setResultMsg("该优惠券绑定记录已存在，不能重复添加！");
-                LOGGER.info("addCouponInfo End:" + JacksonUtil.toJson(couponInfo));
+                LOGGER.info("addCouponInfo End:" + JacksonUtil.toJson(remoteResult));
                 return remoteResult;
             }
 
@@ -122,7 +122,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             if (!salescouponsById.isSuccess()){
                 remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
                 remoteResult.setResultMsg("查询优惠券信息失败");
-                LOGGER.error(JacksonUtil.toJson(salescouponsById)+";"+couponId);
+                LOGGER.info("查询优惠券信息失败" + JacksonUtil.toJson(salescouponsById) + ";" + couponId);
                 return remoteResult;
             }
 
@@ -154,7 +154,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             if (i==0){
                 remoteResult.setResultCode(IntegralResultCode.FAIL);
                 remoteResult.setResultMsg("绑定失败");
-                LOGGER.error("addCouponInfo End:" + JacksonUtil.toJson(remoteResult));
+                LOGGER.info("addCouponInfo End:" + JacksonUtil.toJson(remoteResult));
                 return remoteResult;
             }
 
@@ -227,7 +227,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             if (i==0){
                 remoteResult.setResultCode(IntegralResultCode.SUCCESS);
                 remoteResult.setResultMsg("修改失败");
-                LOGGER.error("updateCouponInfo End:" + JacksonUtil.toJson(remoteResult));
+                LOGGER.info("updateCouponInfo End:" + JacksonUtil.toJson(remoteResult));
                 return remoteResult;
             }
 
@@ -269,7 +269,7 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
                     if (!salescouponsById.isSuccess()){
                         remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
                         remoteResult.setResultMsg("查询优惠券信息失败");
-                        LOGGER.error(JacksonUtil.toJson(salescouponsById)+";"+couponId);
+                        LOGGER.info("查询优惠券信息失败"+JacksonUtil.toJson(salescouponsById)+";"+couponId);
                         return remoteResult;
                     }
                     SalescouponsApi salescouponsApi = salescouponsById.getT();

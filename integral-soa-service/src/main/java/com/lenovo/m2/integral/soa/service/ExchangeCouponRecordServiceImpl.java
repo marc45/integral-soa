@@ -82,7 +82,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             if (!salescouponsById.isSuccess()){
                 remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
                 remoteResult.setResultMsg("查询优惠券信息失败");
-                LOGGER.error(JacksonUtil.toJson(salescouponsById)+";"+couponId);
+                LOGGER.info("查询优惠券信息失败"+JacksonUtil.toJson(salescouponsById)+";"+couponId);
                 return remoteResult;
             }
             SalescouponsApi salescouponsApi = salescouponsById.getT();
