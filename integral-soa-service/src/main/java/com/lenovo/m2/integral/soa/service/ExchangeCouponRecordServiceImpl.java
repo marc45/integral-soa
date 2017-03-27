@@ -142,7 +142,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
             } else if ("10006".equals(code)){
                 //用户积分不够扣减
                 remoteResult.setResultCode(IntegralResultCode.INTEGRAL_LACK);
-                remoteResult.setResultMsg(mppay.getMessage());
+                remoteResult.setResultMsg("您的积分已不足");
                 LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
                 return remoteResult;
             }else if (!"00000".equals(code)){
