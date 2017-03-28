@@ -15,7 +15,7 @@
 
 	<appender name="exchangeCoupon_integral" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/message/integral/integral.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>${log.path}/integral.%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>[%d{yyyy-MM-dd HH:mm:ss} %-5p] projectName : integral-soa %X{elk_leId} %X{elk_lenovoId} %X{elk_requestId} %X{ip} [%thread] %-5level %logger{5} - %msg%n</pattern>
@@ -27,7 +27,7 @@
 	
 	<appender name="exchangeCoupon_coupon" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/message/coupon/coupon.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>${log.path}/coupon.%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>[%d{yyyy-MM-dd HH:mm:ss} %-5p] projectName : integral-soa %X{elk_leId} %X{elk_lenovoId} %X{elk_requestId} %X{ip} [%thread] %-5level %logger{5} - %msg%n</pattern>
