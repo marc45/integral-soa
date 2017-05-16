@@ -224,7 +224,7 @@
         <dependency>
             <groupId>com.lenovo</groupId>
             <artifactId>lenovo-productadmin-client</artifactId>
-            <version>2.0.1-SNAPSHOT</version>
+            <version>2.0.0-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework</groupId>
@@ -256,7 +256,7 @@
         <dependency>
             <groupId>com.lenovo.m2.couponV2</groupId>
             <artifactId>couponV2-soa-api</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
+            <version>3.0.2-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
@@ -318,54 +318,54 @@
 
     <build>
         <defaultGoal>install</defaultGoal>
-            <plugins>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.1</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-scm-plugin</artifactId>
-                    <version>1.9</version>
-                    <configuration>
-                        <tag>v${project.version}</tag>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.0</version>
-                    <configuration>
-                        <source>1.7</source>
-                        <target>1.7</target>
-                        <encoding>utf8</encoding>
-                    </configuration>
-                </plugin>
-                <!-- Jenkins 插件用于生成创建 Jenkins 发布流程的种子文件 -->
-                <plugin>
-                    <groupId>com.lenovo</groupId>
-                    <artifactId>maven-jenkins-plugin</artifactId>
-                    <version>0.0.2-i18n-SNAPSHOT</version>
-                    <executions>
-                        <execution>
-                            <phase>jenkins</phase>
-                            <goals>
-                                <goal>job-create</goal>
-                            </goals>
-                        </execution>
-                    </executions>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.9</version>
+                <configuration>
+                    <tag>v${project.version}</tag>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>utf8</encoding>
+                </configuration>
+            </plugin>
+            <!-- Jenkins 插件用于生成创建 Jenkins 发布流程的种子文件 -->
+            <plugin>
+                <groupId>com.lenovo</groupId>
+                <artifactId>maven-jenkins-plugin</artifactId>
+                <version>0.0.2-i18n-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <phase>jenkins</phase>
+                        <goals>
+                            <goal>job-create</goal>
+                        </goals>
+                    </execution>
+                </executions>
 
-                    <!-- 以下配置的是开发分支，会为配置的每个分支创建一个开发流程 -->
-                    <configuration>
-                        <devBranches>
-                            <branch>master</branch>
-                            <branch>future-1.2.1</branch>
-                        </devBranches>
-                    </configuration>
+                <!-- 以下配置的是开发分支，会为配置的每个分支创建一个开发流程 -->
+                <configuration>
+                    <devBranches>
+                        <branch>master</branch>
+                        <branch>future-1.2.1</branch>
+                    </devBranches>
+                </configuration>
 
-                </plugin>
+            </plugin>
 
-            </plugins>
+        </plugins>
     </build>
 
 
