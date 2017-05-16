@@ -54,7 +54,9 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             }
 
             //调用优惠券接口，获取优惠券信息
+            LOGGER.info("优惠券查询接口==参数=="+couponId);
             RemoteResult<SalescouponsApi> salescouponsById = salescouponsService.getSalescouponsById(Long.parseLong(couponId));
+            LOGGER.info("优惠券查询接口==返回值=="+JacksonUtil.toJson(salescouponsById));
 
             if (!salescouponsById.isSuccess()){
                 remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
@@ -118,7 +120,9 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             Date date = new Date();
 
             //调用优惠券接口，获取优惠券信息
+            LOGGER.info("优惠券查询接口==参数=="+couponId);
             RemoteResult<SalescouponsApi> salescouponsById = salescouponsService.getSalescouponsById(Long.parseLong(couponId));
+            LOGGER.info("优惠券查询接口==返回值=="+JacksonUtil.toJson(salescouponsById));
             if (!salescouponsById.isSuccess()){
                 remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
                 remoteResult.setResultMsg("查询优惠券信息失败");
@@ -265,7 +269,9 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
                 for (CouponAndIntegralInfo info : allCouponInfo) {
                     String couponId = info.getCouponId();
                     //调用优惠券接口，获取优惠券信息
+                    LOGGER.info("优惠券查询接口==参数=="+couponId);
                     RemoteResult<SalescouponsApi> salescouponsById = salescouponsService.getSalescouponsById(Long.parseLong(couponId));
+                    LOGGER.info("优惠券查询接口==返回值=="+JacksonUtil.toJson(salescouponsById));
                     if (!salescouponsById.isSuccess()){
                         remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
                         remoteResult.setResultMsg("查询优惠券信息失败");
