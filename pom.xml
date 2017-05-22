@@ -256,7 +256,7 @@
         <dependency>
             <groupId>com.lenovo.m2.couponV2</groupId>
             <artifactId>couponV2-soa-api</artifactId>
-            <version>3.0.2-SNAPSHOT</version>
+            <version>3.1.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

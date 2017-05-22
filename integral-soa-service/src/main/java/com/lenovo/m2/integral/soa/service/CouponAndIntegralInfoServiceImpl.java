@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -262,45 +264,65 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
             CouponAndIntegralInfo couponAndIntegralInfo = new CouponAndIntegralInfo();
             Date date = new Date();
             couponAndIntegralInfo.setDate(date);
-
+            //查询当前可兑换的所有优惠券
             List<CouponAndIntegralInfo> allCouponInfo = couponAndIntegralInfoManager.getAllCouponInfo(couponAndIntegralInfo);
+            //封装批量查询优惠券条件
+            ArrayList<Long> param = new ArrayList<Long>();
             if (allCouponInfo!=null && allCouponInfo.size()>0){
-                //循环遍历结果集，调用优惠券接口，判断是否还有库存，设置状态值
-                for (CouponAndIntegralInfo info : allCouponInfo) {
-                    String couponId = info.getCouponId();
-                    //调用优惠券接口，获取优惠券信息
-                    LOGGER.info("优惠券查询接口==参数=="+couponId);
-                    RemoteResult<SalescouponsApi> salescouponsById = salescouponsService.getSalescouponsById(Long.parseLong(couponId));
-                    LOGGER.info("优惠券查询接口==返回值=="+JacksonUtil.toJson(salescouponsById));
-                    if (!salescouponsById.isSuccess()){
-                        remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
-                        remoteResult.setResultMsg("查询优惠券信息失败");
-                        LOGGER.info("查询优惠券信息失败"+JacksonUtil.toJson(salescouponsById)+";"+couponId);
-                        return remoteResult;
-                    }
-                    SalescouponsApi salescouponsApi = salescouponsById.getT();
-                    Integer iscanget = salescouponsApi.getIscanget();
-                    if (iscanget==0){
-                        info.setSellout(0);
-                        continue;
-                    }
-                    Integer maxnumber = salescouponsApi.getMaxnumber();
-                    if (maxnumber==0){
-                        //限制，不允许领取
-                        info.setSellout(0);
-                        continue;
-                    }
-                    Integer sendnumber = salescouponsApi.getSendnumber();
-                    if (sendnumber==null){
-                        info.setSellout(1);
-                        continue;
-                    }
-                    //判断是否还有剩余的优惠券可以发放
-                    if (maxnumber-sendnumber>0){
-                        info.setSellout(1);
-                    }else {
-                        info.setSellout(0);
-                    }
+                for (CouponAndIntegralInfo integralInfo : allCouponInfo) {
+                    param.add(Long.parseLong(integralInfo.getCouponId()));
+                }
+            }else {
+                remoteResult.setSuccess(true);
+                remoteResult.setResultCode(IntegralResultCode.SUCCESS);
+                remoteResult.setResultMsg("查询成功");
+                LOGGER.info("getAllCouponInfo End:" + JacksonUtil.toJson(remoteResult));
+                return remoteResult;
+            }
+            LOGGER.info("优惠券批量查询接口==参数==" + JacksonUtil.toJson(param));
+            RemoteResult<List<SalescouponsApi>> salescouponsByIds = salescouponsService.getSalescouponsByIds(param);
+            LOGGER.info("优惠券批量查询接口==返回值=="+JacksonUtil.toJson(salescouponsByIds));
+            if (!salescouponsByIds.isSuccess()){
+                remoteResult.setResultCode(IntegralResultCode.GETCOUPONINFO_FAIL);
+                remoteResult.setResultMsg("查询优惠券信息失败");
+                LOGGER.info("getAllCouponInfo End:"+ JacksonUtil.toJson(remoteResult));
+                return remoteResult;
+            }
+            List<SalescouponsApi> t = salescouponsByIds.getT();
+            HashMap<String,SalescouponsApi> map = new HashMap<String,SalescouponsApi>();
+            if (t!=null && t.size()>0){
+                for (SalescouponsApi salescouponsApi : t) {
+                    map.put(salescouponsApi.getId()+"",salescouponsApi);
+                }
+            }
+            for (CouponAndIntegralInfo info : allCouponInfo) {
+                String couponId = info.getCouponId();
+                SalescouponsApi salescouponsApi = map.get(couponId);
+                if (salescouponsApi==null){
+                    LOGGER.error("查询不到该优惠券信息=="+couponId);
+                    continue;
+                }
+                Integer iscanget = salescouponsApi.getIscanget();
+                if (iscanget==0){
+                    info.setSellout(0);
+                    continue;
+                }
+                Integer maxnumber = salescouponsApi.getMaxnumber();
+                if (maxnumber==0){
+                    //限制，不允许领取
+                    info.setSellout(0);
+                    continue;
+                }
+                Integer sendnumber = salescouponsApi.getSendnumber();
+                if (sendnumber==null){
+                    info.setSellout(1);
+                    continue;
+                }
+                //判断是否还有剩余的优惠券可以发放
+                if (maxnumber-sendnumber>0){
+                    info.setSellout(1);
+                }else {
+                    info.setSellout(0);
                 }
             }
             remoteResult.setT(allCouponInfo);
@@ -310,9 +332,8 @@ public class CouponAndIntegralInfoServiceImpl implements CouponAndIntegralInfoSe
         }catch (Exception e){
             remoteResult.setResultCode(IntegralResultCode.FAIL);
             remoteResult.setResultMsg("系统异常");
-            LOGGER.error(e.getMessage(),e);
+            LOGGER.error(e.getMessage(), e);
         }
-
         LOGGER.info("getAllCouponInfo End:"+ JacksonUtil.toJson(remoteResult));
         return remoteResult;
     }
