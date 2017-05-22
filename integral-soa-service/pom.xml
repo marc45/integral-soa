@@ -123,7 +123,7 @@
                 <version>0.4.11</version>
                 <executions>
                     <execution>
-                        <phase>deploy</phase>
+                        <phase>install</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>
