@@ -6,13 +6,13 @@ package com.lenovo.m2.integral.soa.utils;
 public class PropertiesUtil {
 
     //优惠券绑定经销商路径
-    private String couponBindingUrl;
+    private String productUrl;
 
-    public String getCouponBindingUrl() {
-        return couponBindingUrl;
+    public String getProductUrl() {
+        return productUrl;
     }
 
-    public void setCouponBindingUrl(String couponBindingUrl) {
-        this.couponBindingUrl = couponBindingUrl;
+    public void setProductUrl(String productUrl) {
+        this.productUrl = productUrl;
     }
 }

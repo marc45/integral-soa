@@ -29,6 +29,8 @@ public class IntegralResultCode {
 
     public static final String INTEGRAL_AMOUNT_LACK = "1011";//本季度积分额度不足
 
+    public static final String GETPRODUCTGROUPNOFAIL = "1012";//获取经销商签约关系失败
+
     public static final String FAIL = "9999";//系统异常
 
 

@@ -1,9 +1,12 @@
 package com.lenovo.m2.integral.soa.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.lenovo.m2.arch.framework.domain.PageModel2;
 import com.lenovo.m2.arch.framework.domain.PageQuery;
 import com.lenovo.m2.arch.framework.domain.RemoteResult;
 import com.lenovo.m2.arch.framework.domain.Tenant;
+import com.lenovo.m2.couponV2.api.model.DistributorruleApi;
 import com.lenovo.m2.couponV2.api.model.ProductruleApi;
 import com.lenovo.m2.couponV2.api.model.SalescouponsApi;
 import com.lenovo.m2.couponV2.api.service.SalescouponsService;
@@ -13,7 +16,9 @@ import com.lenovo.m2.integral.soa.domain.CouponAndIntegralInfo;
 import com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord;
 import com.lenovo.m2.integral.soa.manager.CouponAndIntegralInfoManager;
 import com.lenovo.m2.integral.soa.manager.ExchangeCouponRecordManager;
+import com.lenovo.m2.integral.soa.utils.HttpConnectionUtil;
 import com.lenovo.m2.integral.soa.utils.JacksonUtil;
+import com.lenovo.m2.integral.soa.utils.PropertiesUtil;
 import com.lenovo.m2.integral.soa.utils.StringUtil;
 import com.lenovo.points.client.MemPointsClient;
 import com.lenovo.points.vo.MemPointsRollbackResult;
@@ -52,6 +57,9 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
     @Autowired
     private SalescouponsService salescouponsService;
 
+    @Autowired
+    private PropertiesUtil propertiesUtil;
+
     //积分接口客户端
     private MemPointsClient memPointsClient= MemPointsClient.getInstance();
 
@@ -88,33 +96,82 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
                 return remoteResult;
             }
             SalescouponsApi salescouponsApi = salescouponsById.getT();
-
-            //获取优惠券绑定的商品code数组
-            ProductruleApi productruleApi = salescouponsApi.getProductruleApi();
-            if (productruleApi==null){
-                remoteResult.setResultCode(IntegralResultCode.COUPON_NOT_BINGING_GOODS);
-                remoteResult.setResultMsg("该优惠券没有绑定商品！");
-                LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult)+";"+couponId);
-                return remoteResult;
-            }
-            String goodscodes = productruleApi.getGoodscodes();
-            String[] split = goodscodes.split(",");
-            Integer[] codes = new Integer[split.length];
-            for (int i = 0; i < split.length; i++) {
-                codes[i] = Integer.parseInt(split[i]);
-            }
-
-            //判断该用户是否可以购买这些商品
-            LOGGER.info("filter4ProductDetails Start: " + codes.length +";"+buyerId);
-            List<ProductDetail> productDetails = ProductRedis.filter4ProductDetails(codes, buyerId);
-            LOGGER.info("filter4ProductDetails End:" + JacksonUtil.toJson(productDetails));
-
-            if (productDetails ==null || productDetails.size()==0){
-                //如果一件都买不了，那么该用户无法兑换此优惠券
-                remoteResult.setResultCode(IntegralResultCode.COUPON_UNUSABLE);
-                remoteResult.setResultMsg("签约关系不满足兑换此优惠券！");
-                LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
-                return remoteResult;
+            Integer type = salescouponsApi.getType();
+            if (type==2){
+                //按商品绑定的优惠券，获取优惠券绑定的商品code数组
+                ProductruleApi productruleApi = salescouponsApi.getProductruleApi();
+                if (productruleApi==null){
+                    remoteResult.setResultCode(IntegralResultCode.COUPON_NOT_BINGING_GOODS);
+                    remoteResult.setResultMsg("该优惠券没有绑定商品！");
+                    LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult)+";"+couponId);
+                    return remoteResult;
+                }
+                String goodscodes = productruleApi.getGoodscodes();
+                String[] split = goodscodes.split(",");
+                Integer[] codes = new Integer[split.length];
+                for (int i = 0; i < split.length; i++) {
+                    codes[i] = Integer.parseInt(split[i]);
+                }
+                //判断该用户是否可以购买这些商品
+                LOGGER.info("filter4ProductDetails Start: " + codes.length +";"+buyerId);
+                List<ProductDetail> productDetails = ProductRedis.filter4ProductDetails(codes, buyerId);
+                LOGGER.info("filter4ProductDetails End:" + JacksonUtil.toJson(productDetails));
+                if (productDetails ==null || productDetails.size()==0){
+                    //如果一件都买不了，那么该用户无法兑换此优惠券
+                    remoteResult.setResultCode(IntegralResultCode.COUPON_UNUSABLE);
+                    remoteResult.setResultMsg("签约关系不满足兑换此优惠券！");
+                    LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
+                    return remoteResult;
+                }
+            }else if (type==3){
+                //按产品组绑定的优惠券
+                //获取优惠券绑定的产品组信息
+                List<DistributorruleApi> distributorruleApiList = salescouponsApi.getDistributorruleApiList();
+                if (distributorruleApiList==null || distributorruleApiList.size()<=0){
+                    remoteResult.setResultCode(IntegralResultCode.COUPON_NOT_BINGING_GOODS);
+                    remoteResult.setResultMsg("该优惠券没有绑定商品！");
+                    LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult)+";"+couponId);
+                    return remoteResult;
+                }
+                //获取该经销商的绑定的产品组信息
+                String url = propertiesUtil.getProductUrl()+"?"+buyerId;
+                LOGGER.info("查询经销商的签约关系==参数=="+url);
+                String result = HttpConnectionUtil.getHttpContentGet(url);
+                LOGGER.info("查询经销商的签约关系==返回值=="+result);
+                JSONObject jsonObject = JSONObject.parseObject(result);
+                Integer status = jsonObject.getInteger("status");
+                if (status!=200){
+                    remoteResult.setResultCode(IntegralResultCode.GETPRODUCTGROUPNOFAIL);
+                    remoteResult.setResultMsg("获取经销商签约关系失败！");
+                    LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
+                    return remoteResult;
+                }
+                JSONArray data = jsonObject.getJSONArray("data");
+                int flag=0;
+                i:for (int i = 0; i < data.size(); i++) {
+                    JSONObject object = data.getJSONObject(i);
+                    String productgroupno = object.getString("productgroupno");
+                    String fxsno = object.getString("fxsno");
+                    for (DistributorruleApi distributorruleApi : distributorruleApiList) {
+                        String productgroupno2 = distributorruleApi.getProductgroupno();
+                        String facodes = distributorruleApi.getFacode();
+                        String[] fas = facodes.split(",");
+                        if (productgroupno.equals(productgroupno2)){
+                            for (String fa : fas) {
+                                if (fxsno.equals(fa)){
+                                    flag=1;
+                                    break i;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (flag==0){
+                    remoteResult.setResultCode(IntegralResultCode.COUPON_UNUSABLE);
+                    remoteResult.setResultMsg("签约关系不满足兑换此优惠券！");
+                    LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
+                    return remoteResult;
+                }
             }
 
             //查询优惠券绑定的积分信息
