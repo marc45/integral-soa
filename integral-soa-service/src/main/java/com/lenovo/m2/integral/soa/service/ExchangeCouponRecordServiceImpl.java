@@ -134,7 +134,7 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
                     return remoteResult;
                 }
                 //获取该经销商的绑定的产品组信息
-                String url = propertiesUtil.getProductUrl()+"?"+buyerId;
+                String url = propertiesUtil.getProductUrl()+"?jcode="+buyerId;
                 LOGGER.info("查询经销商的签约关系==参数=="+url);
                 String result = HttpConnectionUtil.getHttpContentGet(url);
                 LOGGER.info("查询经销商的签约关系==返回值=="+result);
