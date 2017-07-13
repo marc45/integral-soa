@@ -146,6 +146,13 @@ public class ExchangeCouponRecordServiceImpl implements ExchangeCouponRecordServ
                     LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
                     return remoteResult;
                 }
+                String da = jsonObject.getString("data");
+                if ("{}".equals(da)){
+                    remoteResult.setResultCode(IntegralResultCode.COUPON_UNUSABLE);
+                    remoteResult.setResultMsg("签约关系不满足兑换此优惠券！");
+                    LOGGER.info("exchangeCoupon End:" + JacksonUtil.toJson(remoteResult));
+                    return remoteResult;
+                }
                 JSONArray data = jsonObject.getJSONArray("data");
                 int flag=0;
                 i:for (int i = 0; i < data.size(); i++) {
