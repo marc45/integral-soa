@@ -9,7 +9,7 @@
         http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         ">
     <!--  dubb配置注册信息分割线  -->
-    <dubbo:application name="${dubbo.application.name}"/>
+    <dubbo:application name="${dubbo.application.name}" logger="slf4j"/>
     <dubbo:registry address="${dubbo.registry.address}"  protocol="${dubbo.registry.protocol}" group="${dubbo.registry.group}"/>
     <dubbo:protocol  port="-1" threads="300" />
 
