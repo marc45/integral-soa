@@ -48,7 +48,7 @@
     <resultMap id="exchangeRecordResultMap" type="com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord">
         <id column="id" property="uuid"/>
         <result column="agentId" property="agentId"/>
-        <result column="integral_number" property="integralName"/>
+        <result column="integral_number" property="integralNum"/>
         <result column="exchange_time" property="exchangetime"/>
         <result column="coupon_id" property="couponId"/>
         <result column="coupon_name" property="couponName"/>

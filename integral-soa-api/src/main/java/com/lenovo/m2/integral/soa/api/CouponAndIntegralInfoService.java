@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Created by admin on 2017/2/24.
+ * 积分绑定优惠券服务
  */
 public interface CouponAndIntegralInfoService {
 

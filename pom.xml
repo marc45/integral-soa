@@ -34,7 +34,7 @@
         </dependency>
 
         <!--dubbo-->
-        <dependency>
+        <!--<dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
             <version>${dubbo.version}</version>
@@ -44,7 +44,7 @@
                     <artifactId>spring</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
 
         <!-- 添加spring核心依赖 -->
         <dependency>
@@ -277,6 +277,28 @@
             <version>1.0.13</version>
         </dependency>
 
+        <!--接入Hunter调用链  start-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>2.5.3-G-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>httpclient</artifactId>
+                    <groupId>org.apache.httpcomponents</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--接入Hunter调用链  end-->
+
     </dependencies>
 
     <properties>
@@ -288,7 +310,7 @@
         <framework-manager.version>1.1-SNAPSHOT</framework-manager.version>
         <tool-aop.version>1.0-SNAPSHOT</tool-aop.version>
         <tool-util.version>1.0-SNAPSHOT</tool-util.version>
-        <dubbo.version>2.4.5</dubbo.version>
+        <!--<dubbo.version>2.4.5</dubbo.version>-->
         <commons.lang.version>2.6</commons.lang.version>
         <org.slf4j.version>1.6.1</org.slf4j.version>
         <servlet-api.version>2.5</servlet-api.version>
@@ -385,7 +407,5 @@
 
         </plugins>
     </build>
-
-
 
 </project>

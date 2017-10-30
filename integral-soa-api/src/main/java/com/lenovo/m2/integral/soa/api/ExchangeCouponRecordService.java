@@ -7,6 +7,7 @@ import com.lenovo.m2.integral.soa.domain.ExchangeCouponRecord;
 
 /**
  * Created by admin on 2017/2/24.
+ * 积分兑换优惠券服务
  */
 public interface ExchangeCouponRecordService {
 
