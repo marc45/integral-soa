@@ -13,6 +13,7 @@
         </encoder>
     </appender>
 
+    <!--积分兑换优惠券 积分扣减日志-->
 	<appender name="exchangeCoupon_integral" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${log.path}/integral.%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -25,7 +26,8 @@
     <logger name="com.lenovo.m2.integral.soa.integral" level="info" additivity="false">
         <appender-ref ref="exchangeCoupon_integral" />
     </logger>
-	
+
+    <!--积分兑换优惠券 绑券日志-->
 	<appender name="exchangeCoupon_coupon" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${log.path}/coupon.%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -37,6 +39,20 @@
     </appender>
     <logger name="com.lenovo.m2.integral.soa.coupon" level="info" additivity="false">
         <appender-ref ref="exchangeCoupon_coupon" />
+    </logger>
+
+    <!--惠商订单返还积分的所有日志-->
+    <appender name="integralReward" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/integralReward.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <!--<pattern>[%d{yyyy-MM-dd HH:mm:ss} %-5p] projectName : integral-soa %X{elk_leId} %X{elk_lenovoId} %X{elk_requestId} %X{ip} [%thread] %-5level %logger{5} - %msg%n</pattern>-->
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p] projectName : integral-soa %X{hunterid} [%thread] %-5level %logger{5} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="com.lenovo.m2.integral.soa.integralReward" level="info" additivity="false">
+        <appender-ref ref="integralReward" />
     </logger>
 
     <logger name="org.springframework" level="WARN" additivity="false"/>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lenovo.m2.integral.soa.dao.IntegralRewardMapper" >
+  <resultMap id="BaseResultMap" type="com.lenovo.m2.integral.soa.domain.IntegralReward" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="lenovoId" property="lenovoId" jdbcType="VARCHAR" />
+    <result column="orderCode" property="orderCode" jdbcType="BIGINT" />
+    <result column="shopId" property="shopId" jdbcType="INTEGER" />
+    <result column="payOrThrow" property="payOrThrow" jdbcType="INTEGER" />
+    <result column="payMode" property="payMode" jdbcType="INTEGER" />
+    <result column="payOrThrowTime" property="payOrThrowTime" jdbcType="TIMESTAMP" />
+    <result column="itemCode" property="itemCode" jdbcType="VARCHAR" />
+    <result column="itemName" property="itemName" jdbcType="VARCHAR" />
+    <result column="itemPrice" property="itemPrice" jdbcType="BIGINT" />
+    <result column="itemGroupId" property="itemGroupId" jdbcType="INTEGER" />
+    <result column="itemLogistics" property="itemLogistics" jdbcType="INTEGER" />
+    <result column="itemFlag" property="itemFlag" jdbcType="INTEGER" />
+    <result column="integralNum" property="integralNum" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="createBy" property="createBy" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="updateBy" property="updateBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, lenovoId, orderCode, shopId, payOrThrow, payMode, payOrThrowTime, itemCode, itemName, 
+    itemPrice, itemGroupId, itemLogistics, itemFlag, integralNum,
+    status, createTime, createBy, updateTime, updateBy
+  </sql>
+
+  <select id="getIntegralReward" resultMap="BaseResultMap" parameterType="com.lenovo.m2.integral.soa.domain.IntegralReward" >
+    select
+    <include refid="Base_Column_List" />
+    from integralReward
+    where orderCode=#{orderCode} AND itemCode=#{itemCode} AND itemFlag=#{itemFlag}
+  </select>
+
+  <update id="updateIntegralReward" parameterType="com.lenovo.m2.integral.soa.domain.IntegralReward" >
+    update integralReward
+    set integralNum = #{integralNum},status = #{status},updateTime = now()
+    where orderCode=#{orderCode} AND itemCode=#{itemCode} AND itemFlag=#{itemFlag} AND status=0
+  </update>
+
+  <insert id="saveIntegralReward" parameterType="com.lenovo.m2.integral.soa.domain.IntegralReward" >
+    insert into integralReward (lenovoId, orderCode,
+        shopId, payOrThrow, payMode,
+        payOrThrowTime, itemCode, itemName,
+        itemPrice,itemGroupId, itemLogistics, itemFlag,
+        createTime,createBy, updateTime, updateBy)
+    values (#{lenovoId,jdbcType=VARCHAR}, #{orderCode,jdbcType=BIGINT},
+    #{shopId,jdbcType=INTEGER}, #{payOrThrow,jdbcType=INTEGER}, #{payMode,jdbcType=INTEGER},
+    #{payOrThrowTime,jdbcType=TIMESTAMP}, #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR},
+    #{itemPrice,jdbcType=BIGINT}, #{itemGroupId,jdbcType=INTEGER}, #{itemLogistics,jdbcType=INTEGER},
+    #{itemFlag,jdbcType=INTEGER},now(), #{createBy,jdbcType=VARCHAR}, now(), #{updateBy,jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <delete id="deleteIntegralRewardById" parameterType="java.lang.Long" >
+    delete from integralReward
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+</mapper>

@@ -23,7 +23,8 @@ public class Provider {
                             "classpath:applicationContext-propertiesResource.xml",
                             "classpath:spring-mybatis.xml",
                             "classpath:mybatis-config.xml",
-                            "provider.xml"
+                            "classpath:provider.xml",
+                            "classpath:spring-config-kafka.xml"
                     }
             );
 
