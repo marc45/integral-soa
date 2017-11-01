@@ -23,7 +23,7 @@ public class IntegralRewardServiceTest extends BaseServiceTest {
         try {
             IntegralReward integralReward = new IntegralReward();
             integralReward.setLenovoId("1001");
-            integralReward.setOrderCode(1001L);
+            integralReward.setOrderCode(1003L);
             integralReward.setShopId(14);
             integralReward.setPayOrThrow(0);
             integralReward.setPayMode(0);
@@ -32,7 +32,7 @@ public class IntegralRewardServiceTest extends BaseServiceTest {
             integralReward.setItemName("商品1001");
             integralReward.setItemPrice(1288800L);
             integralReward.setItemGroupId(999);
-            integralReward.setItemLogistics(0);
+            integralReward.setItemLogistics(2);
             integralReward.setItemFlag(1);
 
             integralRewardService.hsIntegralReward(integralReward);

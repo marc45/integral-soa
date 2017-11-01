@@ -13,12 +13,15 @@
     <dubbo:registry address="${dubbo.registry.address}"  protocol="${dubbo.registry.protocol}" group="${dubbo.registry.group}"/>
     <dubbo:protocol  port="-1" threads="300" />
 
-    <dubbo:reference id="salescouponsService" interface="com.lenovo.m2.couponV2.api.service.SalescouponsService" cache="false" timeout="500000" check="false" retries="0"/>
-
-
-    <!--soa服务-->
+    <!--提供服务-->
+    <!--积分兑换优惠券-->
     <dubbo:service interface="com.lenovo.m2.integral.soa.api.CouponAndIntegralInfoService" ref="couponAndIntegralInfoService" />
     <dubbo:service interface="com.lenovo.m2.integral.soa.api.ExchangeCouponRecordService" ref="exchangeCouponRecordService" />
+    <!--积分奖励-->
+    <dubbo:service interface="com.lenovo.m2.integral.soa.api.IntegralRewardService" ref="integralRewardService" />
 
+    <!--消费服务-->
+    <!--优惠券服务-->
+    <dubbo:reference id="salescouponsService" interface="com.lenovo.m2.couponV2.api.service.SalescouponsService" cache="false" timeout="500000" check="false" retries="0"/>
 
 </beans>

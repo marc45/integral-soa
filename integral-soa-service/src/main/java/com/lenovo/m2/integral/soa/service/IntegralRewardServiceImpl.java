@@ -4,6 +4,8 @@ import com.lenovo.m2.integral.soa.api.IntegralRewardService;
 import com.lenovo.m2.integral.soa.domain.IntegralReward;
 import com.lenovo.m2.integral.soa.manager.IntegralRewardManager;
 import com.lenovo.m2.integral.soa.utils.JacksonUtil;
+import com.lenovo.points.client.MemPointsClient;
+import com.lenovo.points.vo.MemPointsWriteResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,14 @@ public class IntegralRewardServiceImpl extends BaseService implements IntegralRe
     private IntegralRewardManager integralRewardManager;
 
     //返还积分比例
-    private static final double ratio01 = 0.05;
-    private static final double ratio02 = 0.03;
+    private static final double RATIO01 = 0.05;
+    private static final double RATIO02 = 0.03;
+    //调用积分接口参数
+    private static final String ORDER_REWARD_INTEGRAL = "MPORL";
+    private static final String INTEGRALREWARD = "integralReward";
+
+    //积分接口客户端
+    private MemPointsClient memPointsClient= MemPointsClient.getInstance();
 
     //惠商奖励积分接口
     @Override
@@ -55,8 +63,9 @@ public class IntegralRewardServiceImpl extends BaseService implements IntegralRe
                 LOGGER.info("hsIntegralReward==结束==已经处理过==" + JacksonUtil.toJson(integralReward));
                 return;
             }
+            //计算应奖励积分
             int integralNum = countIntegralNum(integralReward);
-            //修改记录状态
+            //修改记录状态为1
             integralReward.setIntegralNum(integralNum);
             integralReward.setStatus(1);
             int i = integralRewardManager.updateIntegralReward(integralReward);
@@ -64,27 +73,50 @@ public class IntegralRewardServiceImpl extends BaseService implements IntegralRe
                 LOGGER.info("hsIntegralReward==结束==记录状态修改为1失败==" + JacksonUtil.toJson(integralReward));
                 return;
             }
-            //TODO 发放积分
+            //应发放积分数量大于0，则调用发放积分接口
             if (integralNum>0){
-                //应发放积分数量大于0，则调用发放积分接口
-
-            }
-            /*if ("发放积分失败"){
-                integralReward.setStatus(0);
-                int j = integralRewardManager.updateIntegralReward(integralReward);
-                if (j<=0){
-                    LOGGER.info("hsIntegralReward==结束==记录状态修改为0失败==" + JacksonUtil.toJson(integralReward));
+                boolean b = rewardIntegral(integralReward);
+                if (!b){
+                    LOGGER.info("hsIntegralReward==结束==奖励积分失败==" + JacksonUtil.toJson(integralReward));
                     return;
                 }
-            }*/
+            }
         }catch (Exception e){
-            LOGGER.info("hsIntegralReward==出现异常==" + JacksonUtil.toJson(integralReward)+ "==" + e.getMessage(), e);
+            LOGGER.error("hsIntegralReward==出现异常==" + JacksonUtil.toJson(integralReward)+ "==" + e.getMessage(), e);
             return;
         }
         LOGGER.info("hsIntegralReward==结束==操作成功=="+ JacksonUtil.toJson(integralReward));
     }
 
-    //计算应奖励积分，结果四舍五入
+    //调用积分接口奖励积分
+    private boolean rewardIntegral(IntegralReward reward){
+        try {
+            LOGGER.info("hsIntegralReward==积分接口参数==lenovoId=" + reward.getLenovoId()+";integralNum="+reward.getIntegralNum()+";orderCode="+reward.getOrderCode());
+            MemPointsWriteResult mporl = memPointsClient.write(ORDER_REWARD_INTEGRAL, reward.getLenovoId(), INTEGRALREWARD, reward.getIntegralNum(), "{\"bask_work_order\":\"integralReward_" + reward.getOrderCode() + "\"}");
+            LOGGER.info("hsIntegralReward==积分接口返回值==" + JacksonUtil.toJson(mporl));
+            if (mporl==null || !"00000".equals(mporl.getCode())){
+                //积分奖励失败，将记录状态置为0
+                reward.setStatus(0);
+                int j = integralRewardManager.updateIntegralReward(reward);
+                if (j<=0){
+                    LOGGER.error("hsIntegralReward==结束==记录状态修改为0失败==" + JacksonUtil.toJson(reward));
+                }
+                return false;
+            }else {
+                return true;
+            }
+        }catch (Exception e){
+            LOGGER.info("hsIntegralReward==rewardIntegral出现异常==" + JacksonUtil.toJson(reward)+ "==" + e.getMessage(), e);
+            reward.setStatus(0);
+            int j = integralRewardManager.updateIntegralReward(reward);
+            if (j<=0){
+                LOGGER.error("hsIntegralReward==结束==记录状态修改为0失败==" + JacksonUtil.toJson(reward));
+            }
+            return false;
+        }
+    }
+
+    //根据规则计算应奖励积分，结果四舍五入
     private int countIntegralNum(IntegralReward reward){
         if (reward.getPayOrThrow()==0 ||
                 (reward.getPayOrThrow()==1&&reward.getPayMode()==0&&reward.getItemLogistics()==2) ||
@@ -94,10 +126,10 @@ public class IntegralRewardServiceImpl extends BaseService implements IntegralRe
              * 02商品：49,68,95产品组商品，线上支付，不走sec物流，按照实际支付金额的3%比例返回积分
              * 03商品：49,68,95产品组商品，线下支付，走sec物流，按照实际支付金额的3%比例返回积分
              */
-            return (int) Math.round(reward.getItemPrice() * ratio02 / 100);
+            return (int) Math.round(reward.getItemPrice() * RATIO02 / 100);
         }else if (reward.getPayOrThrow()==1&&reward.getPayMode()==0&&reward.getItemLogistics()==1){
             //01商品：49,68,95产品组商品，线上支付，走sec物流
-            return (int) Math.round(reward.getItemPrice() * ratio01 / 100);
+            return (int) Math.round(reward.getItemPrice() * RATIO01 / 100);
         }
         return 0;
     }
