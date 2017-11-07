@@ -281,7 +281,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
-            <version>2.5.3-G-SNAPSHOT</version>
+            <version>2.5.3-G0.5-fix</version>
             <exclusions>
                 <exclusion>
                     <artifactId>httpclient</artifactId>
