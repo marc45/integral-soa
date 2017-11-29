@@ -1,4 +1,4 @@
-From dockerhub.lefile.cn/alpine_jdk:7
+From dockerhub.lefile.cn/common/alpine_jdk:7
 
 MAINTAINER shaoyh2@lenovo.com
 
