@@ -22,15 +22,15 @@ public class IntegralRewardServiceTest extends BaseServiceTest {
     public void getExchangeRecordTest(){
         try {
             IntegralReward integralReward = new IntegralReward();
-            integralReward.setLenovoId("1001");
-            integralReward.setOrderCode(1003L);
+            integralReward.setLenovoId("1005");
+            integralReward.setOrderCode(100001L);
             integralReward.setShopId(14);
             integralReward.setPayOrThrow(0);
-            integralReward.setPayMode(0);
+            integralReward.setPayMode(2);
             integralReward.setPayOrThrowTime(new Date());
-            integralReward.setItemCode("1001");
-            integralReward.setItemName("商品1001");
-            integralReward.setItemPrice(1288800L);
+            integralReward.setItemCode("1005");
+            integralReward.setItemName("商品1005");
+            integralReward.setItemPrice(128800L);
             integralReward.setItemGroupId(999);
             integralReward.setItemLogistics(2);
             integralReward.setItemFlag(1);

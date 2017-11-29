@@ -41,6 +41,13 @@
     where orderCode=#{orderCode} AND itemCode=#{itemCode} AND itemFlag=#{itemFlag} AND status=0
   </update>
 
+  <update id="updateIntegralRewardStatus" parameterType="com.lenovo.m2.integral.soa.domain.IntegralReward" >
+    update integralReward
+    set status = 0,updateTime = now()
+    where orderCode=#{orderCode} AND itemCode=#{itemCode} AND itemFlag=#{itemFlag} AND status=1
+  </update>
+
+
   <insert id="saveIntegralReward" parameterType="com.lenovo.m2.integral.soa.domain.IntegralReward" >
     insert into integralReward (lenovoId, orderCode,
         shopId, payOrThrow, payMode,

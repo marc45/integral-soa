@@ -29,6 +29,13 @@ public interface IntegralRewardMapper {
     public int updateIntegralReward(IntegralReward integralReward);
 
     /**
+     * 根据订单号、商品code、商品行项目标识，修改发放状态
+     * @param integralReward
+     * @return
+     */
+    public int updateIntegralRewardStatus(IntegralReward integralReward);
+
+    /**
      * 根据id删除记录
      * @param id
      * @return
