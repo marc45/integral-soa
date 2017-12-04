@@ -63,4 +63,9 @@ public class IntegralRewardManagerImpl implements IntegralRewardManager{
         return integralRewardMapper.deleteIntegralRewardById(id);
     }
 
+    //根据记录id修改发放状态
+    public int updateStatusById(IntegralReward integralReward){
+        return integralRewardMapper.updateStatusById(integralReward);
+    }
+
 }

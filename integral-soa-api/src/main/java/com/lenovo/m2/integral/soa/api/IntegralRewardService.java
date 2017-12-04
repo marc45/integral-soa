@@ -14,4 +14,7 @@ public interface IntegralRewardService {
     //根据id删除积分奖励记录
     public int deleteIntegralReward(Long id);
 
+    //根据记录id修改发放状态
+    public int updateStatusById(IntegralReward integralReward);
+
 }

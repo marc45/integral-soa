@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 /**
  * Created by admin on 2017/10/31.
  * 惠商积分奖励服务
@@ -77,12 +79,12 @@ public class IntegralRewardServiceImpl extends BaseService implements IntegralRe
             if (integralNum>0){
                 boolean b = rewardIntegral(integralReward);
                 if (!b){
-                    LOGGER.info("hsIntegralReward==结束==奖励积分失败==" + JacksonUtil.toJson(integralReward));
+                    LOGGER.error("hsIntegralReward==结束==奖励积分失败==" + JacksonUtil.toJson(integralReward));
                     return;
                 }
             }
         }catch (Exception e){
-            LOGGER.error("hsIntegralReward==出现异常==" + JacksonUtil.toJson(integralReward)+ "==" + e.getMessage(), e);
+            LOGGER.error("hsIntegralReward==出现异常==" + JacksonUtil.toJson(integralReward) + "==" + e.getMessage(), e);
             return;
         }
         LOGGER.info("hsIntegralReward==结束==操作成功=="+ JacksonUtil.toJson(integralReward));
@@ -91,13 +93,16 @@ public class IntegralRewardServiceImpl extends BaseService implements IntegralRe
     //调用积分接口奖励积分
     private boolean rewardIntegral(IntegralReward reward){
         try {
-            LOGGER.info("hsIntegralReward==积分接口参数==lenovoId=" + reward.getLenovoId()+";integralNum="+reward.getIntegralNum()+";orderCode="+reward.getOrderCode());
-            MemPointsWriteResult mporl = memPointsClient.write(ORDER_REWARD_INTEGRAL, reward.getLenovoId(), INTEGRALREWARD, reward.getIntegralNum(), "{\"bask_work_order\":\"integralReward_" + reward.getOrderCode() + "\"}");
+            StringBuilder bask_work_order = new StringBuilder("{\"bask_work_order\":\"");
+            bask_work_order.append(UUID.randomUUID().toString().replace("-",""));
+            bask_work_order.append("\"}");
+            LOGGER.info("hsIntegralReward==积分接口参数==lenovoId=" + reward.getLenovoId()+";integralNum="+reward.getIntegralNum()+";bask_work_order="+bask_work_order.toString());
+            MemPointsWriteResult mporl = memPointsClient.write(ORDER_REWARD_INTEGRAL, reward.getLenovoId(), INTEGRALREWARD, reward.getIntegralNum(), bask_work_order.toString());
             LOGGER.info("hsIntegralReward==积分接口返回值==" + JacksonUtil.toJson(mporl));
             if (mporl==null || !"00000".equals(mporl.getCode())){
                 //积分奖励失败，将记录状态置为0
                 reward.setStatus(0);
-                int j = integralRewardManager.updateIntegralReward(reward);
+                int j = integralRewardManager.updateIntegralRewardStatus(reward);
                 if (j<=0){
                     LOGGER.error("hsIntegralReward==结束==记录状态修改为0失败==" + JacksonUtil.toJson(reward));
                 }
@@ -108,7 +113,7 @@ public class IntegralRewardServiceImpl extends BaseService implements IntegralRe
         }catch (Exception e){
             LOGGER.info("hsIntegralReward==rewardIntegral出现异常==" + JacksonUtil.toJson(reward)+ "==" + e.getMessage(), e);
             reward.setStatus(0);
-            int j = integralRewardManager.updateIntegralReward(reward);
+            int j = integralRewardManager.updateIntegralRewardStatus(reward);
             if (j<=0){
                 LOGGER.error("hsIntegralReward==结束==记录状态修改为0失败==" + JacksonUtil.toJson(reward));
             }
@@ -160,5 +165,11 @@ public class IntegralRewardServiceImpl extends BaseService implements IntegralRe
     @Override
     public int deleteIntegralReward(Long id) {
         return integralRewardManager.deleteIntegralRewardById(id);
+    }
+
+    //根据记录id修改发放状态
+    @Override
+    public int updateStatusById(IntegralReward integralReward) {
+        return integralRewardManager.updateStatusById(integralReward);
     }
 }
