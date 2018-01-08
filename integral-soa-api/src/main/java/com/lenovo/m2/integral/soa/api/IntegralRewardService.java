@@ -17,4 +17,6 @@ public interface IntegralRewardService {
     //根据记录id修改发放状态
     public int updateStatusById(IntegralReward integralReward);
 
+    public int fixData(String filename);
+
 }

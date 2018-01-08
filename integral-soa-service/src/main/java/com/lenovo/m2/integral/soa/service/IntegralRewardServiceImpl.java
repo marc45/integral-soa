@@ -11,6 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.UUID;
 
 /**
@@ -96,7 +100,7 @@ public class IntegralRewardServiceImpl extends BaseService implements IntegralRe
             StringBuilder bask_work_order = new StringBuilder("{\"bask_work_order\":\"");
             bask_work_order.append(UUID.randomUUID().toString().replace("-",""));
             bask_work_order.append("\"}");
-            LOGGER.info("hsIntegralReward==积分接口参数==lenovoId=" + reward.getLenovoId()+";integralNum="+reward.getIntegralNum()+";bask_work_order="+bask_work_order.toString());
+            LOGGER.info("hsIntegralReward==积分接口参数==lenovoId=" + reward.getLenovoId() + ";integralNum=" + reward.getIntegralNum() + ";bask_work_order=" + bask_work_order.toString());
             MemPointsWriteResult mporl = memPointsClient.write(ORDER_REWARD_INTEGRAL, reward.getLenovoId(), INTEGRALREWARD, reward.getIntegralNum(), bask_work_order.toString());
             LOGGER.info("hsIntegralReward==积分接口返回值==" + JacksonUtil.toJson(mporl));
             if (mporl==null || !"00000".equals(mporl.getCode())){
@@ -111,7 +115,7 @@ public class IntegralRewardServiceImpl extends BaseService implements IntegralRe
                 return true;
             }
         }catch (Exception e){
-            LOGGER.info("hsIntegralReward==rewardIntegral出现异常==" + JacksonUtil.toJson(reward)+ "==" + e.getMessage(), e);
+            LOGGER.info("hsIntegralReward==rewardIntegral出现异常==" + JacksonUtil.toJson(reward) + "==" + e.getMessage(), e);
             reward.setStatus(0);
             int j = integralRewardManager.updateIntegralRewardStatus(reward);
             if (j<=0){
@@ -171,5 +175,41 @@ public class IntegralRewardServiceImpl extends BaseService implements IntegralRe
     @Override
     public int updateStatusById(IntegralReward integralReward) {
         return integralRewardManager.updateStatusById(integralReward);
+    }
+
+    @Override
+    public int fixData(String filename) {
+        int count = 0;
+        BufferedReader reader = null;
+        try {
+            String path = "/data/logs/dubbo/"+filename;
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(path),"utf-8"));
+            String temp;
+            while ((temp=reader.readLine())!=null){
+                if (count==3){
+                    return count;
+                }
+                count++;
+                System.out.println(temp);
+                LOGGER.info("fixData=="+temp);
+                //String substring = temp.substring(temp.indexOf("惠商积分奖励消息")+10);
+                //System.out.println(substring);
+                //IntegralReward integralReward = JacksonUtil.fromJson(substring, IntegralReward.class);
+                //hsIntegralReward(integralReward);
+                //System.out.println(JacksonUtil.toJson(integralReward));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            //在finally中关闭开启的流
+            if (reader!=null){
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return count;
     }
 }
